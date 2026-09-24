@@ -4,6 +4,8 @@ import {
   onAuthStateChanged, 
   signOut as fbSignOut, 
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile as fbUpdateProfile
@@ -78,8 +80,35 @@ export const ArenaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [loading, setLoading] = useState(true);
   const [userRank, setUserRank] = useState<number>(1);
   const [curriculum, setCurriculum] = useState<Subject[]>(INITIAL_AKTU_CURRICULUM);
-  const [currentTab, setCurrentTab] = useState<AppTab>('landing');
+
+  // Check if running as installed standalone PWA, home screen launch, or has direct hash/query
+  const [currentTab, setCurrentTab] = useState<AppTab>(() => {
+    if (typeof window === 'undefined') return 'landing';
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    const isNavStandalone = (window.navigator as any).standalone === true;
+    const searchParams = new URLSearchParams(window.location.search);
+    const isPwaSource = searchParams.get('source') === 'pwa';
+    const hash = window.location.hash.replace(/^#/, '').toLowerCase().split('?')[0];
+
+    if (hash && ['dashboard', 'ailab', 'battle', 'community', 'leaderboard', 'profile', 'admin', 'about', 'team', 'contact', 'terms', 'privacy', 'sitemap'].includes(hash)) {
+      return hash as AppTab;
+    }
+
+    if (isStandalone || isNavStandalone || isPwaSource) {
+      return 'dashboard';
+    }
+
+    return 'landing';
+  });
+
   const [pendingBattleRoomId, setPendingBattleRoomId] = useState<string | null>(null);
+
+  // Check for redirect result from Google OAuth (useful on mobile & PWA)
+  useEffect(() => {
+    getRedirectResult(auth).catch((err) => {
+      console.warn('Google redirect result status:', err?.message || err);
+    });
+  }, []);
 
   // Check URL query parameters for direct battle room invites (e.g. ?room=ROOM_CODE)
   useEffect(() => {
@@ -664,12 +693,26 @@ export const ArenaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setCurrentTab('landing');
   };
 
-  // Google Sign-In with popup
+  // Google Sign-In with popup + redirect fallback (for mobile & PWA standalone)
   const signInWithGoogle = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
     } catch (err: any) {
-      console.error('Google sign-in error:', err);
+      console.warn('Google sign-in popup attempt notice:', err?.code, err?.message);
+      if (
+        err?.code === 'auth/popup-blocked' ||
+        err?.code === 'auth/cancelled-popup-request' ||
+        err?.code === 'auth/popup-closed-by-user'
+      ) {
+        // Fallback to full redirect on mobile/PWA if popup is blocked
+        try {
+          await signInWithRedirect(auth, googleProvider);
+          return;
+        } catch (redirectErr) {
+          console.error('Google sign-in redirect fallback failed:', redirectErr);
+          throw redirectErr;
+        }
+      }
       throw err;
     }
   };

@@ -3,7 +3,7 @@
   "name": "AKTU Arena — Study & Battle",
   "short_name": "AKTU Arena",
   "description": "AI-powered competitive learning platform for AKTU B.Tech 1st Year engineering students.",
-  "start_url": "/",
+  "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",

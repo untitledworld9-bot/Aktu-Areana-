@@ -21,7 +21,7 @@ export default defineConfig(() => {
           background_color: '#07090E',
           display: 'standalone',
           orientation: 'portrait-primary',
-          start_url: '/',
+          start_url: '/?source=pwa',
           scope: '/',
           categories: ['education', 'games'],
           icons: [

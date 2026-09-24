@@ -30,7 +30,7 @@ import { TeamPage } from './components/pages/TeamPage';
 import { SitemapPage } from './components/pages/SitemapPage';
 import { applyPageSeo } from './utils/seo';
 import { Question, Subject, AppTab } from './types';
-import { Swords, X } from 'lucide-react';
+import { Swords, X, Zap, LogIn } from 'lucide-react';
 
 const ArenaApp: React.FC = () => {
   const { 
@@ -46,6 +46,21 @@ const ArenaApp: React.FC = () => {
   } = useArena();
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+
+  // When launching as installed PWA / standalone on mobile:
+  // If not logged in, auto-open AuthModal so the student can sign in with 1-click Google immediately!
+  useEffect(() => {
+    if (!user && !profile && !loading) {
+      const isStandalone = typeof window !== 'undefined' && (
+        window.matchMedia('(display-mode: standalone)').matches ||
+        (window.navigator as any).standalone === true ||
+        new URLSearchParams(window.location.search).get('source') === 'pwa'
+      );
+      if (isStandalone) {
+        setAuthModalOpen(true);
+      }
+    }
+  }, [user, profile, loading]);
 
   const canAccessAdmin = Boolean(
     isMasterAdmin || 
@@ -176,7 +191,98 @@ const ArenaApp: React.FC = () => {
               <CommunityView onOpenAuth={handleOpenAuth} />
             </div>
           )}
-          {(currentTab === 'landing' || (!['about', 'contact', 'terms', 'privacy', 'team', 'sitemap', 'community'].includes(currentTab))) && (
+          {currentTab === 'dashboard' && (
+            <div className="pt-20 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6">
+              {/* Guest Engineer Welcome Banner */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-cyan-950/70 via-slate-900/90 to-violet-950/70 border border-cyan-500/40 backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-11 h-11 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shrink-0">
+                    <Zap className="w-6 h-6 animate-pulse" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm sm:text-base font-bold text-slate-100 font-['Outfit']">
+                        AKTU Arena Command Center
+                      </span>
+                      <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                        Guest Mode
+                      </span>
+                    </div>
+                    <div className="text-xs text-slate-300 mt-0.5">
+                      Explore official B.Tech 1st Year syllabus subjects. Sign in with Google to save your level progression & compete in live 1v1 battles!
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2.5 w-full sm:w-auto shrink-0">
+                  <button
+                    onClick={() => handleOpenAuth('login')}
+                    className="w-full sm:w-auto px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-400 to-violet-500 hover:from-cyan-300 hover:to-violet-400 text-slate-950 text-xs font-extrabold cursor-pointer shadow-lg transition-transform hover:scale-105"
+                  >
+                    Sign In with Google
+                  </button>
+                </div>
+              </div>
+
+              <Dashboard 
+                onStartAILab={() => handleOpenAuth('login')}
+                onStartBattle={() => handleOpenAuth('login')}
+                onQuickPractice={() => handleOpenAuth('login')}
+              />
+            </div>
+          )}
+          {currentTab === 'ailab' && (
+            <div className="pt-20 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+              <AILab onStartChallenge={handleStartPracticeChallenge} />
+            </div>
+          )}
+          {currentTab === 'battle' && (
+            <div className="pt-24 pb-24 px-4 sm:px-6 lg:px-8 max-w-2xl mx-auto text-center space-y-6">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
+                <Swords className="w-8 h-8 animate-bounce" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-black text-slate-100 font-['Outfit']">
+                  AKTU 1v1 Engineering Battle Arena
+                </h2>
+                <p className="text-sm text-slate-400 max-w-md mx-auto mt-2">
+                  Challenge engineering peers from across 750+ AKTU colleges in live timed duels with synchronized questions and MMR ratings.
+                </p>
+              </div>
+              <button
+                onClick={() => handleOpenAuth('login')}
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-violet-500 hover:from-cyan-300 hover:to-violet-400 text-slate-950 text-sm font-extrabold cursor-pointer shadow-lg transition-transform hover:scale-105"
+              >
+                Sign In to Enter Battle Queue
+              </button>
+            </div>
+          )}
+          {currentTab === 'leaderboard' && (
+            <div className="pt-20 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+              <LeaderboardView />
+            </div>
+          )}
+          {currentTab === 'profile' && (
+            <div className="pt-24 pb-24 px-4 sm:px-6 lg:px-8 max-w-md mx-auto text-center space-y-6">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
+                <LogIn className="w-8 h-8 animate-pulse" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-black text-slate-100 font-['Outfit']">
+                  Student Profile & Progression
+                </h2>
+                <p className="text-sm text-slate-400 max-w-sm mx-auto mt-2">
+                  Sign in to view your semester attendance streak, college badges, subject mastery radars, and match duels.
+                </p>
+              </div>
+              <button
+                onClick={() => handleOpenAuth('login')}
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-violet-500 hover:from-cyan-300 hover:to-violet-400 text-slate-950 text-sm font-extrabold cursor-pointer shadow-lg transition-transform hover:scale-105"
+              >
+                Sign In to View Profile
+              </button>
+            </div>
+          )}
+          {currentTab === 'landing' && (
             <LandingPage onOpenAuth={handleOpenAuth} />
           )}
         </main>

@@ -160,44 +160,49 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenAuth }) => {
         ) : (
           <nav className="hidden md:flex items-center gap-1 bg-slate-900/80 p-1 rounded-xl border border-slate-800 backdrop-blur-md">
             <button
-              onClick={() => setCurrentTab('landing')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
-                currentTab === 'landing' ? 'text-cyan-400 bg-slate-800' : 'text-slate-400 hover:text-slate-200'
+              onClick={() => setCurrentTab('dashboard')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                currentTab === 'dashboard' ? 'bg-slate-800 text-cyan-300 border border-slate-700 font-bold' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Home
+              <Compass className="w-3.5 h-3.5" />
+              <span>Dashboard</span>
             </button>
             <button
-              onClick={() => setCurrentTab('about')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
-                currentTab === 'about' ? 'text-cyan-400 bg-slate-800' : 'text-slate-400 hover:text-slate-200'
+              onClick={() => setCurrentTab('ailab')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                currentTab === 'ailab' ? 'bg-slate-800 text-cyan-300 border border-slate-700 font-bold' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              About
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>Practice Lab</span>
             </button>
             <button
-              onClick={() => setCurrentTab('team')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
-                currentTab === 'team' ? 'text-cyan-400 bg-slate-800' : 'text-slate-400 hover:text-slate-200'
+              onClick={() => setCurrentTab('battle')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                currentTab === 'battle' ? 'bg-slate-800 text-cyan-300 border border-slate-700 font-bold' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Our Team
+              <Swords className="w-3.5 h-3.5" />
+              <span>1v1 Battle</span>
             </button>
             <button
-              onClick={() => setCurrentTab('contact')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
-                currentTab === 'contact' ? 'text-cyan-400 bg-slate-800' : 'text-slate-400 hover:text-slate-200'
+              onClick={() => setCurrentTab('community')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                currentTab === 'community' ? 'bg-slate-800 text-cyan-300 border border-slate-700 font-bold' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Contact
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span>Community</span>
             </button>
             <button
-              onClick={() => setCurrentTab('sitemap')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
-                currentTab === 'sitemap' ? 'text-cyan-400 bg-slate-800' : 'text-slate-400 hover:text-slate-200'
+              onClick={() => setCurrentTab('leaderboard')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                currentTab === 'leaderboard' ? 'bg-slate-800 text-cyan-300 border border-slate-700 font-bold' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Sitemap
+              <Trophy className="w-3.5 h-3.5" />
+              <span>Leaderboard</span>
             </button>
           </nav>
         )}
@@ -279,10 +284,10 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenAuth }) => {
         </div>
       </header>
 
-      {/* Mobile Bottom Navigation Bar */}
-      {hasSession && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/95 dark:bg-[#07090E]/95 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 z-40 px-2 flex items-center justify-around shadow-lg">
-          {navItems.map((item) => {
+      {/* Mobile Bottom Navigation Bar (Rendered for both Logged In & Guest visitors) */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/95 dark:bg-[#07090E]/95 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 z-40 px-2 flex items-center justify-around shadow-lg">
+        {hasSession ? (
+          navItems.map((item) => {
             // Strictly hide admin tab for non-admins
             if (item.id === 'admin' && !isAuthorizedAdmin) return null;
             const Icon = item.icon;
@@ -301,9 +306,55 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenAuth }) => {
                 <span className="truncate">{item.label.split(' ')[0]}</span>
               </button>
             );
-          })}
-        </div>
-      )}
+          })
+        ) : (
+          <>
+            <button
+              onClick={() => setCurrentTab('dashboard')}
+              className={`flex flex-col items-center justify-center w-12 h-12 rounded-xl text-[10px] font-semibold transition-all ${
+                currentTab === 'dashboard' ? 'text-cyan-700 dark:text-cyan-400 scale-105' : 'text-slate-500 dark:text-slate-400'
+              }`}
+            >
+              <Compass className={`w-5 h-5 mb-0.5 ${currentTab === 'dashboard' ? 'text-cyan-700 dark:text-cyan-400' : 'text-slate-500 dark:text-slate-400'}`} />
+              <span className="truncate">Home</span>
+            </button>
+            <button
+              onClick={() => setCurrentTab('ailab')}
+              className={`flex flex-col items-center justify-center w-12 h-12 rounded-xl text-[10px] font-semibold transition-all ${
+                currentTab === 'ailab' ? 'text-cyan-700 dark:text-cyan-400 scale-105' : 'text-slate-500 dark:text-slate-400'
+              }`}
+            >
+              <BookOpen className={`w-5 h-5 mb-0.5 ${currentTab === 'ailab' ? 'text-cyan-700 dark:text-cyan-400' : 'text-slate-500 dark:text-slate-400'}`} />
+              <span className="truncate">Practice</span>
+            </button>
+            <button
+              onClick={() => setCurrentTab('battle')}
+              className={`flex flex-col items-center justify-center w-12 h-12 rounded-xl text-[10px] font-semibold transition-all ${
+                currentTab === 'battle' ? 'text-cyan-700 dark:text-cyan-400 scale-105' : 'text-slate-500 dark:text-slate-400'
+              }`}
+            >
+              <Swords className={`w-5 h-5 mb-0.5 ${currentTab === 'battle' ? 'text-cyan-700 dark:text-cyan-400' : 'text-slate-500 dark:text-slate-400'}`} />
+              <span className="truncate">1v1 Battle</span>
+            </button>
+            <button
+              onClick={() => setCurrentTab('community')}
+              className={`flex flex-col items-center justify-center w-12 h-12 rounded-xl text-[10px] font-semibold transition-all ${
+                currentTab === 'community' ? 'text-cyan-700 dark:text-cyan-400 scale-105' : 'text-slate-500 dark:text-slate-400'
+              }`}
+            >
+              <MessageSquare className={`w-5 h-5 mb-0.5 ${currentTab === 'community' ? 'text-cyan-700 dark:text-cyan-400' : 'text-slate-500 dark:text-slate-400'}`} />
+              <span className="truncate">Community</span>
+            </button>
+            <button
+              onClick={onOpenAuth}
+              className="flex flex-col items-center justify-center w-12 h-12 rounded-xl text-[10px] font-bold text-cyan-600 dark:text-cyan-400 transition-all hover:scale-105"
+            >
+              <User className="w-5 h-5 mb-0.5 text-cyan-600 dark:text-cyan-400" />
+              <span className="truncate">Sign In</span>
+            </button>
+          </>
+        )}
+      </div>
 
       {/* Levels Roadmap Modal */}
       <LevelsRoadmapModal
