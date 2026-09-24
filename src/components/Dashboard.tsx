@@ -32,6 +32,7 @@ import { SubjectBadgesModal } from './SubjectBadgesModal';
 import { LevelsRoadmapModal } from './LevelsRoadmapModal';
 import { calculateSubjectMastery, SubjectMasteryData } from '../utils/subjectMastery';
 import { getLevelFromXp } from '../utils/levelProgression';
+import { PullToRefresh } from './ui/PullToRefresh';
 
 interface DashboardProps {
   onStartAILab: () => void;
@@ -127,9 +128,15 @@ export const Dashboard: React.FC<DashboardProps> = ({
   const target = profile?.dailyQuestionsTarget || 20;
   const progressPercent = Math.min(Math.round((solved / target) * 100), 100);
 
+  const handleDashboardRefresh = async () => {
+    // Artificial tactile delay to let students see the smooth update animation
+    await new Promise((resolve) => setTimeout(resolve, 650));
+  };
+
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12">
-      {/* Top Action Bar */}
+    <PullToRefresh onRefresh={handleDashboardRefresh} className="w-full">
+      <div className="space-y-6 max-w-7xl mx-auto pb-12">
+        {/* Top Action Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-sm">
         <div className="flex items-center gap-2.5">
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -611,6 +618,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
         isOpen={levelsRoadmapOpen}
         onClose={() => setLevelsRoadmapOpen(false)}
       />
-    </div>
+      </div>
+    </PullToRefresh>
   );
 };

@@ -43,6 +43,7 @@ import {
 } from 'lucide-react';
 import { useArena } from '../context/ArenaContext';
 import { CommunityPost, CommunityComment, UserRole } from '../types';
+import { PullToRefresh } from './ui/PullToRefresh';
 import { 
   collection, 
   query, 
@@ -1145,8 +1146,31 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ onOpenAuth }) => {
     }
   };
 
+  const handleRefreshFeed = async () => {
+    try {
+      const postsQuery = query(
+        collection(db, 'community_posts'),
+        orderBy('createdAt', 'desc'),
+        limit(60)
+      );
+      const snap = await getDocs(postsQuery);
+      const postsMap = new Map<string, CommunityPost>();
+      snap.forEach((docSnap) => {
+        postsMap.set(docSnap.id, { id: docSnap.id, ...docSnap.data() } as CommunityPost);
+      });
+      const fetched = Array.from(postsMap.values());
+      if (fetched.length > 0) {
+        setPosts(fetched);
+      }
+    } catch (err) {
+      console.warn('Manual pull refresh error:', err);
+    }
+    await new Promise((resolve) => setTimeout(resolve, 600));
+  };
+
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-16">
+    <PullToRefresh onRefresh={handleRefreshFeed} className="w-full">
+      <div className="space-y-6 max-w-7xl mx-auto pb-16">
       
       {/* Clean Top Action Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#0A0E17] p-3.5 sm:p-4 rounded-2xl border border-slate-800">
@@ -2389,6 +2413,7 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ onOpenAuth }) => {
         </div>
       )}
 
-    </div>
+      </div>
+    </PullToRefresh>
   );
 };
