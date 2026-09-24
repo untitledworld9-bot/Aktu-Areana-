@@ -189,15 +189,15 @@ const ArenaApp: React.FC = () => {
             <div className="pt-20"><PrivacyPage /></div>
           )}
           {currentTab === 'sitemap' && (
-            <div className="pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"><SitemapPage /></div>
+            <div className="pt-16 sm:pt-20 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto"><SitemapPage /></div>
           )}
           {currentTab === 'community' && (
-            <div className="pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div className="pt-16 sm:pt-20 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto">
               <CommunityView onOpenAuth={handleOpenAuth} />
             </div>
           )}
           {currentTab === 'dashboard' && (
-            <div className="pt-20 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6">
+            <div className="pt-16 sm:pt-20 pb-20 sm:pb-24 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6">
               {/* Guest Engineer Welcome Banner */}
               <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-cyan-950/70 via-slate-900/90 to-violet-950/70 border border-cyan-500/40 backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
                 <div className="flex items-center gap-3.5">
@@ -236,7 +236,7 @@ const ArenaApp: React.FC = () => {
             </div>
           )}
           {currentTab === 'ailab' && (
-            <div className="pt-24 pb-24 px-4 sm:px-6 lg:px-8 max-w-2xl mx-auto text-center space-y-6">
+            <div className="pt-16 sm:pt-20 pb-20 sm:pb-24 px-3.5 sm:px-6 lg:px-8 max-w-2xl mx-auto text-center space-y-6">
               <div className="w-16 h-16 mx-auto rounded-2xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
                 <BookOpen className="w-8 h-8 animate-pulse" />
               </div>
@@ -278,12 +278,12 @@ const ArenaApp: React.FC = () => {
             </div>
           )}
           {currentTab === 'leaderboard' && (
-            <div className="pt-20 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div className="pt-16 sm:pt-20 pb-20 sm:pb-24 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto">
               <LeaderboardView />
             </div>
           )}
           {currentTab === 'profile' && (
-            <div className="pt-24 pb-24 px-4 sm:px-6 lg:px-8 max-w-md mx-auto text-center space-y-6">
+            <div className="pt-16 sm:pt-20 pb-20 sm:pb-24 px-3.5 sm:px-6 lg:px-8 max-w-md mx-auto text-center space-y-6">
               <div className="w-16 h-16 mx-auto rounded-2xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
                 <LogIn className="w-8 h-8 animate-pulse" />
               </div>
@@ -391,7 +391,7 @@ const ArenaApp: React.FC = () => {
       <div className="min-h-screen bg-[#07090E] text-slate-200 selection:bg-cyan-500 selection:text-slate-950 font-sans flex flex-col justify-between">
         <BackgroundGlow />
         <Navigation onOpenAuth={() => handleOpenAuth('login')} />
-        <main className="pt-20 flex-1">
+        <main className="pt-16 sm:pt-18 flex-1">
           <ProfileOnboarding />
         </main>
         <PWAInstallModal />
@@ -402,11 +402,11 @@ const ArenaApp: React.FC = () => {
 
   // Signed in & Onboarded -> Main Application Shell (Platform workspace without marketing footer)
   return (
-    <div className="min-h-screen bg-[#07090E] text-slate-200 selection:bg-cyan-500 selection:text-slate-950 font-sans flex flex-col justify-between pb-24 md:pb-0 w-full max-w-full overflow-x-hidden relative">
+    <div className="min-h-screen bg-[#07090E] text-slate-200 selection:bg-cyan-500 selection:text-slate-950 font-sans flex flex-col justify-between pb-20 md:pb-0 w-full max-w-full overflow-x-hidden relative">
       <BackgroundGlow />
       <Navigation onOpenAuth={() => handleOpenAuth('login')} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 flex-1 w-full max-w-full min-w-0 overflow-x-hidden">
+      <main className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-16 sm:pt-20 flex-1 w-full max-w-full min-w-0 overflow-x-hidden">
         {currentTab === 'dashboard' && (
           <Dashboard
             onStartAILab={() => setCurrentTab('ailab')}

@@ -70,26 +70,26 @@ export const ProfileOnboarding: React.FC = () => {
   };
 
   return (
-    <div className="relative z-10 w-full max-w-2xl mx-auto px-4 py-16">
-      <div className="text-center mb-8">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-semibold mb-3">
+    <div className="relative z-10 w-full max-w-2xl mx-auto px-3.5 sm:px-6 pt-2 sm:pt-4 pb-8 sm:pb-12">
+      <div className="text-center mb-4 sm:mb-5">
+        <div className="inline-flex items-center gap-1.5 px-3 py-0.5 sm:py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-[11px] sm:text-xs font-semibold mb-2">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Student Setup • Step {step} of 6</span>
         </div>
-        <h2 className="text-3xl font-extrabold text-slate-100 font-['Outfit']">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-100 font-['Outfit']">
           Configure Your Arena Profile
         </h2>
-        <p className="text-sm text-slate-400 mt-1">
+        <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
           Tailor your college identity, curriculum, and AI question engine.
         </p>
       </div>
 
       {/* Step Indicators */}
-      <div className="flex items-center justify-between mb-8 px-4">
+      <div className="flex items-center justify-between mb-4 sm:mb-6 px-2 sm:px-4">
         {[1, 2, 3, 4, 5, 6].map((i) => (
           <div key={i} className="flex items-center">
             <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+              className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
                 step === i
                   ? 'bg-cyan-500 text-slate-950 shadow-[0_0_15px_rgba(6,182,212,0.6)]'
                   : step > i
@@ -97,11 +97,11 @@ export const ProfileOnboarding: React.FC = () => {
                   : 'bg-slate-900 text-slate-600 border border-slate-800'
               }`}
             >
-              {step > i ? <Check className="w-4 h-4" /> : i}
+              {step > i ? <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : i}
             </div>
             {i < 6 && (
               <div
-                className={`w-8 sm:w-16 h-0.5 mx-1 transition-colors ${
+                className={`w-6 sm:w-14 h-0.5 mx-0.5 sm:mx-1 transition-colors ${
                   step > i ? 'bg-cyan-500/50' : 'bg-slate-800'
                 }`}
               />
@@ -110,7 +110,7 @@ export const ProfileOnboarding: React.FC = () => {
         ))}
       </div>
 
-      <GlassCard className="p-6 sm:p-8" glow="cyan">
+      <GlassCard className="p-4 sm:p-7" glow="cyan">
         {/* Step 1: University */}
         {step === 1 && (
           <div className="space-y-4">
