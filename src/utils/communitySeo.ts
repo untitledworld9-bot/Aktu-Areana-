@@ -128,7 +128,7 @@ export function injectStructuredDataToHead(scriptId: string, schemaObj: object):
 /**
  * Dynamically updates document metadata for an individual post or community thread.
  */
-export function updateThreadMetaTags(post: CommunityPost, origin: string = typeof window !== 'undefined' ? window.location.origin : ''): () => void {
+export function updateThreadMetaTags(post: CommunityPost, origin: string = typeof window !== 'undefined' ? window.location.origin : 'https://aktuareana.netlify.app'): () => void {
   if (typeof document === 'undefined') return () => {};
 
   const prevTitle = document.title;
@@ -141,18 +141,34 @@ export function updateThreadMetaTags(post: CommunityPost, origin: string = typeo
   const ogDesc = document.querySelector('meta[property="og:description"]');
   const prevOgDesc = ogDesc?.getAttribute('content') || '';
 
+  const ogImage = document.querySelector('meta[property="og:image"]');
+  const prevOgImage = ogImage?.getAttribute('content') || '';
+
+  const ogImageSecure = document.querySelector('meta[property="og:image:secure_url"]');
+  const prevOgImageSecure = ogImageSecure?.getAttribute('content') || '';
+
+  const twitterImage = document.querySelector('meta[name="twitter:image"]');
+  const prevTwitterImage = twitterImage?.getAttribute('content') || '';
+
   const snippet = post.content.length > 140 ? `${post.content.slice(0, 137)}...` : post.content;
   const newTitle = `${post.title} — AKTU Community | AKTU Arena`;
+  const postImageUrl = post.imageUrl || `${origin}/pwa-512x512.png`;
 
   document.title = newTitle;
   if (metaDesc) metaDesc.setAttribute('content', `${post.authorName} (${post.authorCollege || 'AKTU'}): ${snippet}`);
   if (ogTitle) ogTitle.setAttribute('content', newTitle);
   if (ogDesc) ogDesc.setAttribute('content', snippet);
+  if (ogImage) ogImage.setAttribute('content', postImageUrl);
+  if (ogImageSecure) ogImageSecure.setAttribute('content', postImageUrl);
+  if (twitterImage) twitterImage.setAttribute('content', postImageUrl);
 
   return () => {
     document.title = prevTitle;
     if (metaDesc && prevDesc) metaDesc.setAttribute('content', prevDesc);
     if (ogTitle && prevOgTitle) ogTitle.setAttribute('content', prevOgTitle);
     if (ogDesc && prevOgDesc) ogDesc.setAttribute('content', prevOgDesc);
+    if (ogImage && prevOgImage) ogImage.setAttribute('content', prevOgImage);
+    if (ogImageSecure && prevOgImageSecure) ogImageSecure.setAttribute('content', prevOgImageSecure);
+    if (twitterImage && prevTwitterImage) twitterImage.setAttribute('content', prevTwitterImage);
   };
 }

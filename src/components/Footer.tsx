@@ -91,10 +91,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAuth }) => {
               onClick={() => handleNavigate((user || profile) ? 'dashboard' : 'landing')}
               className="flex items-center gap-3 cursor-pointer group inline-flex"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-violet-600 p-[1px] shadow-[0_0_15px_rgba(6,182,212,0.3)]">
-                <div className="w-full h-full bg-[#07090E] rounded-[11px] flex items-center justify-center">
-                  <Zap className="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-transform" />
-                </div>
+              <div className="w-10 h-10 rounded-xl bg-[#07090E] border border-cyan-500/40 p-0.5 shadow-[0_0_15px_rgba(6,182,212,0.3)] shrink-0 flex items-center justify-center">
+                <img 
+                  src="/icon.svg" 
+                  alt="AKTU Arena Logo" 
+                  className="w-full h-full object-contain rounded-lg group-hover:scale-110 transition-transform" 
+                />
               </div>
               <div>
                 <span className="font-bold text-lg tracking-wider text-slate-100 font-['Outfit']">

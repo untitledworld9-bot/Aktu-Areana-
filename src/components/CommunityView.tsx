@@ -690,11 +690,27 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ onOpenAuth }) => {
     }
   };
 
+  // Open create post or trigger login modal if visitor
+  const handleOpenCreatePost = () => {
+    if (!user || !profile) {
+      if (onOpenAuth) {
+        onOpenAuth('login');
+      } else {
+        alert('Please sign in to create a post or ask doubts!');
+      }
+      return;
+    }
+    setIsCreateOpen(true);
+  };
+
   // 6. Submit New Community Post
   const handleCreatePost = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTitle.trim() || !newContent.trim() || !user || !profile) {
-      if (!user) alert('Please sign in to publish a post.');
+      if (!user) {
+        if (onOpenAuth) onOpenAuth('login');
+        else alert('Please sign in to publish a post.');
+      }
       return;
     }
 
@@ -1121,7 +1137,7 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ onOpenAuth }) => {
         {/* Action Button: Create Post */}
         <div className="flex items-center gap-2 flex-wrap">
           <button
-            onClick={() => setIsCreateOpen(true)}
+            onClick={handleOpenCreatePost}
             className="px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-slate-950 flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.25)] transition-all cursor-pointer shrink-0"
           >
             <Plus className="w-4 h-4" />
@@ -1255,7 +1271,7 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ onOpenAuth }) => {
               Be the first scholar to ask an exam doubt, share notes, or post a meme!
             </p>
             <button
-              onClick={() => setIsCreateOpen(true)}
+              onClick={handleOpenCreatePost}
               className="mt-2 px-4 py-2 rounded-xl text-xs font-bold bg-cyan-600 hover:bg-cyan-500 text-slate-950 transition-colors cursor-pointer"
             >
               Start First Discussion

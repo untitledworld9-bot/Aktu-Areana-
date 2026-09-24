@@ -30,7 +30,7 @@ import { TeamPage } from './components/pages/TeamPage';
 import { SitemapPage } from './components/pages/SitemapPage';
 import { applyPageSeo } from './utils/seo';
 import { Question, Subject, AppTab } from './types';
-import { Swords, X, Zap, LogIn } from 'lucide-react';
+import { Swords, X, Zap, LogIn, BookOpen } from 'lucide-react';
 
 const ArenaApp: React.FC = () => {
   const { 
@@ -231,8 +231,24 @@ const ArenaApp: React.FC = () => {
             </div>
           )}
           {currentTab === 'ailab' && (
-            <div className="pt-20 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-              <AILab onStartChallenge={handleStartPracticeChallenge} />
+            <div className="pt-24 pb-24 px-4 sm:px-6 lg:px-8 max-w-2xl mx-auto text-center space-y-6">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
+                <BookOpen className="w-8 h-8 animate-pulse" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-black text-slate-100 font-['Outfit']">
+                  AKTU AI Practice Lab & Question Vault
+                </h2>
+                <p className="text-sm text-slate-400 max-w-md mx-auto mt-2 leading-relaxed">
+                  Generate chapter-wise practice problems, solved PYQ solutions, and track your syllabus mastery score for AKTU B.Tech 1st Year.
+                </p>
+              </div>
+              <button
+                onClick={() => handleOpenAuth('login')}
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-violet-500 hover:from-cyan-300 hover:to-violet-400 text-slate-950 text-sm font-extrabold cursor-pointer shadow-lg transition-transform hover:scale-105"
+              >
+                Sign In to Start Practice
+              </button>
             </div>
           )}
           {currentTab === 'battle' && (

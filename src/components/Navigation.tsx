@@ -83,8 +83,12 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenAuth }) => {
             className="flex items-center gap-2.5 sm:gap-3 cursor-pointer group min-w-0"
             title="Command Center"
           >
-            <div className="w-9 h-9 rounded-xl bg-cyan-50 dark:bg-cyan-500/20 border border-cyan-300 dark:border-cyan-500/30 flex items-center justify-center shrink-0">
-              <Zap className="w-5 h-5 text-cyan-600 dark:text-cyan-400 group-hover:scale-105 transition-transform" />
+            <div className="w-9 h-9 rounded-xl bg-[#07090E] border border-cyan-500/40 p-0.5 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.3)]">
+              <img 
+                src="/icon.svg" 
+                alt="AKTU Arena" 
+                className="w-full h-full object-contain rounded-lg group-hover:scale-110 transition-transform" 
+              />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-1.5 flex-wrap">
@@ -110,8 +114,12 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenAuth }) => {
             onClick={() => setCurrentTab('landing')}
             className="flex items-center gap-3 cursor-pointer group"
           >
-            <div className="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center">
-              <Zap className="w-5 h-5 text-cyan-400 group-hover:scale-105 transition-transform" />
+            <div className="w-9 h-9 rounded-xl bg-[#07090E] border border-cyan-500/40 p-0.5 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.3)]">
+              <img 
+                src="/icon.svg" 
+                alt="AKTU Arena Logo" 
+                className="w-full h-full object-contain rounded-lg group-hover:scale-110 transition-transform" 
+              />
             </div>
             <div>
               <div className="flex items-center gap-2">
