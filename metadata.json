@@ -1,0 +1,6 @@
+{
+  "name": "AKTU Arena",
+  "description": "AI-powered competitive learning platform for AKTU B.Tech 1st Year engineering students (Session 2026–27). Practice curriculum-aligned topics, timed challenges, live 1v1 battles, and gamified XP progression.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

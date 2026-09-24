@@ -1,0 +1,10 @@
+name = "aktu-arena-api"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+ENVIRONMENT = "production"
+
+# Secret required:
+# Run: npx wrangler secret put GEMINI_API_KEY
+# Or set in Cloudflare Dashboard -> Workers & Pages -> Settings -> Variables and Secrets

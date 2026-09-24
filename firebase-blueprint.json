@@ -1,0 +1,314 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Student profile data in AKTU Arena",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "university": { "type": "string" },
+        "academicSession": { "type": "string" },
+        "year": { "type": "string" },
+        "branch": { "type": "string" },
+        "studyGoals": { "type": "string" },
+        "dailyQuestionsTarget": { "type": "number" },
+        "dailyMinutesTarget": { "type": "number" },
+        "xp": { "type": "number" },
+        "streak": { "type": "number" },
+        "questionsSolved": { "type": "number" },
+        "battlesPlayed": { "type": "number" },
+        "battlesWon": { "type": "number" },
+        "role": { "type": "string", "enum": ["student", "admin"] },
+        "isOnboarded": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "displayName", "university", "academicSession", "year", "branch"]
+    },
+    "SubjectCurriculum": {
+      "title": "SubjectCurriculum",
+      "description": "Official AKTU curriculum subject record",
+      "type": "object",
+      "properties": {
+        "subjectId": { "type": "string" },
+        "subjectName": { "type": "string" },
+        "branch": { "type": "string" },
+        "year": { "type": "string" },
+        "semester": { "type": "number" },
+        "academicSession": { "type": "string" },
+        "officialSource": { "type": "string" },
+        "lastVerified": { "type": "string" },
+        "status": { "type": "string", "enum": ["verified", "pending_review", "draft"] }
+      },
+      "required": ["subjectId", "subjectName", "branch", "year", "semester", "academicSession", "status"]
+    },
+    "BattleSession": {
+      "title": "BattleSession",
+      "description": "Live 1v1 battle match room",
+      "type": "object",
+      "properties": {
+        "battleId": { "type": "string" },
+        "subjectId": { "type": "string" },
+        "topic": { "type": "string" },
+        "difficulty": { "type": "string" },
+        "status": { "type": "string", "enum": ["waiting", "active", "completed"] },
+        "player1Id": { "type": "string" },
+        "player1Name": { "type": "string" },
+        "player1Score": { "type": "number" },
+        "player2Id": { "type": "string" },
+        "player2Name": { "type": "string" },
+        "player2Score": { "type": "number" },
+        "winnerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["battleId", "subjectId", "topic", "status", "player1Id", "player1Name"]
+    },
+    "QuestionAttempt": {
+      "title": "QuestionAttempt",
+      "description": "Student question answer log for accuracy and study analytics",
+      "type": "object",
+      "properties": {
+        "attemptId": { "type": "string" },
+        "userId": { "type": "string" },
+        "subjectId": { "type": "string" },
+        "topic": { "type": "string" },
+        "question": { "type": "string" },
+        "isCorrect": { "type": "boolean" },
+        "timeTakenSeconds": { "type": "number" },
+        "xpEarned": { "type": "number" },
+        "attemptedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["attemptId", "userId", "subjectId", "isCorrect"]
+    },
+    "PlatformStats": {
+      "title": "PlatformStats",
+      "description": "Aggregated platform counters for online activity",
+      "type": "object",
+      "properties": {
+        "studentsOnline": { "type": "number" },
+        "questionsSolvedToday": { "type": "number" },
+        "activeBattles": { "type": "number" },
+        "aiQuestionsGenerated": { "type": "number" },
+        "lastUpdated": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentsOnline", "questionsSolvedToday", "activeBattles", "aiQuestionsGenerated"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Student notification for battle challenges, streak reminders, and achievements",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "type": { "type": "string", "enum": ["battle_challenge", "streak_reminder", "achievement", "battle_result", "system"] },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "actionTab": { "type": "string" },
+        "battleId": { "type": "string" },
+        "fromUserName": { "type": "string" },
+        "fromUserId": { "type": "string" },
+        "fromUserBranch": { "type": "string" },
+        "fromUserCollege": { "type": "string" },
+        "subjectId": { "type": "string" },
+        "subjectName": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "declined"] }
+      },
+      "required": ["id", "userId", "type", "title", "message", "read", "createdAt"]
+    },
+    "QuestionBankItem": {
+      "title": "QuestionBankItem",
+      "description": "Curriculum-aligned question stored in the persistent question bank pool",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "question": { "type": "string" },
+        "options": { "type": "array" },
+        "correctAnswer": { "type": "string" },
+        "explanation": { "type": "string" },
+        "subject": { "type": "string" },
+        "subjectId": { "type": "string" },
+        "unit": { "type": "number" },
+        "topic": { "type": "string" },
+        "difficulty": { "type": "string" },
+        "questionType": { "type": "string" },
+        "sourceContext": { "type": "string" },
+        "generatedAt": { "type": "string", "format": "date-time" },
+        "isAiGenerated": { "type": "boolean" },
+        "usageCount": { "type": "number" }
+      },
+      "required": ["id", "question", "correctAnswer", "subjectId"]
+    },
+    "TeamMember": {
+      "title": "TeamMember",
+      "description": "Official team member displayed on the platform",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "education": { "type": "string" },
+        "description": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "email": { "type": "string" },
+        "linkedin": { "type": "string" },
+        "github": { "type": "string" },
+        "twitter": { "type": "string" },
+        "displayOrder": { "type": "number" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "role", "education", "description"]
+    },
+    "ContactInquiry": {
+      "title": "ContactInquiry",
+      "description": "Student or college inquiry submitted via the contact form",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "college": { "type": "string" },
+        "branch": { "type": "string" },
+        "category": { "type": "string" },
+        "message": { "type": "string" },
+        "status": { "type": "string", "enum": ["new", "reviewed", "resolved"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "email", "category", "message", "createdAt"]
+    },
+    "UserBattleRecord": {
+      "title": "UserBattleRecord",
+      "description": "Comprehensive user battle log including question-by-question review, selected answers, and explanations",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "battleId": { "type": "string" },
+        "userId": { "type": "string" },
+        "mode": { "type": "string", "enum": ["multiplayer", "solo"] },
+        "subjectId": { "type": "string" },
+        "subjectName": { "type": "string" },
+        "topic": { "type": "string" },
+        "difficulty": { "type": "string" },
+        "myScore": { "type": "number" },
+        "opponentScore": { "type": "number" },
+        "opponentUid": { "type": "string" },
+        "opponentName": { "type": "string" },
+        "opponentBranch": { "type": "string" },
+        "opponentCollege": { "type": "string" },
+        "result": { "type": "string", "enum": ["won", "lost", "tied"] },
+        "xpEarned": { "type": "number" },
+        "questions": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["battleId", "userId", "mode", "subjectId", "subjectName", "myScore", "result", "questions", "createdAt"]
+    },
+    "CommunityPost": {
+      "title": "CommunityPost",
+      "description": "Engineering community posts, questions, notes, and discussions",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "authorUid": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorPhoto": { "type": "string" },
+        "authorBranch": { "type": "string" },
+        "authorCollege": { "type": "string" },
+        "authorRole": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "category": { "type": "string" },
+        "tags": { "type": "array" },
+        "imageUrl": { "type": "string" },
+        "codeSnippet": { "type": "object" },
+        "upvotesCount": { "type": "number" },
+        "downvotesCount": { "type": "number" },
+        "upvotedBy": { "type": "array" },
+        "downvotedBy": { "type": "array" },
+        "reactions": { "type": "object" },
+        "commentsCount": { "type": "number" },
+        "isPinned": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["authorUid", "authorName", "title", "content", "category", "createdAt"]
+    },
+    "CommunityComment": {
+      "title": "CommunityComment",
+      "description": "Replies and solutions on community discussion posts",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "postId": { "type": "string" },
+        "authorUid": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorPhoto": { "type": "string" },
+        "authorBranch": { "type": "string" },
+        "authorCollege": { "type": "string" },
+        "authorRole": { "type": "string" },
+        "text": { "type": "string" },
+        "likesCount": { "type": "number" },
+        "likedBy": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["postId", "authorUid", "authorName", "text", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Student profile data"
+    },
+    "/curriculum/{subjectId}": {
+      "schema": "SubjectCurriculum",
+      "description": "Official AKTU curriculum subjects and units"
+    },
+    "/battles/{battleId}": {
+      "schema": "BattleSession",
+      "description": "Live 1v1 multiplayer matches"
+    },
+    "/user_battle_history/{recordId}": {
+      "schema": "UserBattleRecord",
+      "description": "User battle history log with full question-and-answer explanations"
+    },
+    "/community_posts/{postId}": {
+      "schema": "CommunityPost",
+      "description": "AKTU student community discussion feed, doubt solutions, and engineering notes"
+    },
+    "/community_posts/{postId}/comments/{commentId}": {
+      "schema": "CommunityComment",
+      "description": "Replies and answers to community discussion posts"
+    },
+    "/attempts/{attemptId}": {
+      "schema": "QuestionAttempt",
+      "description": "User question attempts and practice history"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "User notifications, battle challenge invites, and streak alerts"
+    },
+    "/platform/stats": {
+      "schema": "PlatformStats",
+      "description": "Aggregated platform telemetry"
+    },
+    "/questions_bank/{questionId}": {
+      "schema": "QuestionBankItem",
+      "description": "Persistent shared repository of AI-generated and curriculum practice questions"
+    },
+    "/team_members/{memberId}": {
+      "schema": "TeamMember",
+      "description": "Platform team profiles managed from the admin console"
+    },
+    "/contact_inquiries/{inquiryId}": {
+      "schema": "ContactInquiry",
+      "description": "Inquiries and messages submitted through the contact page"
+    },
+    "/promotions/{promoId}": {
+      "schema": "PromotionPopup",
+      "description": "Promotional poster popups and banners displayed across the platform"
+    }
+  }
+}

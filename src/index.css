@@ -1,0 +1,279 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ----------------------------------------------------
+   Light & Dark Theme System
+   ---------------------------------------------------- */
+html.light {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+html.light,
+html.light body {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+html.dark,
+html.dark body {
+  background-color: #07090e;
+  color: #f8fafc;
+}
+
+/* Hard guarantees for Light Mode cards so they NEVER turn dark */
+html.light .bg-white {
+  background-color: #ffffff !important;
+}
+
+html.light .border-slate-200 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Light mode card elevation & shadows */
+html.light .rounded-2xl.border,
+html.light .rounded-xl.border {
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.05);
+}
+
+/* Card & Base surface overrides in Light Mode for legacy fixed dark backgrounds */
+html.light footer,
+html.light .bg-\[\#04060A\],
+html.light .bg-\[\#07090E\],
+html.light .bg-\[\#07090E\]\/80,
+html.light .bg-\[\#07090E\]\/90,
+html.light .bg-\[\#07090E\]\/95,
+html.light .bg-\[\#0D1117\],
+html.light .bg-\[\#0D111A\],
+html.light .bg-\[\#090D16\],
+html.light .bg-\[\#0A0E17\],
+html.light .bg-\[\#0B0F19\],
+html.light .bg-\[\#0B0F19\]\/95,
+html.light .bg-slate-950,
+html.light .bg-slate-950\/20,
+html.light .bg-slate-950\/30,
+html.light .bg-slate-950\/40,
+html.light .bg-slate-950\/50,
+html.light .bg-slate-950\/60,
+html.light .bg-slate-950\/70,
+html.light .bg-slate-950\/80,
+html.light .bg-slate-950\/90,
+html.light .bg-slate-900,
+html.light .bg-slate-900\/20,
+html.light .bg-slate-900\/30,
+html.light .bg-slate-900\/40,
+html.light .bg-slate-900\/50,
+html.light .bg-slate-900\/60,
+html.light .bg-slate-900\/70,
+html.light .bg-slate-900\/80,
+html.light .bg-slate-900\/90,
+html.light .bg-slate-900\/95 {
+  background-color: #ffffff !important;
+}
+
+/* Secondary & Pill surfaces in Light Mode */
+html.light .bg-slate-800,
+html.light .bg-slate-800\/20,
+html.light .bg-slate-800\/30,
+html.light .bg-slate-800\/40,
+html.light .bg-slate-800\/50,
+html.light .bg-slate-800\/60,
+html.light .bg-slate-800\/70,
+html.light .bg-slate-800\/80,
+html.light .bg-slate-800\/90 {
+  background-color: #f1f5f9 !important;
+}
+
+/* Hover state overrides in Light Mode */
+html.light .hover\:bg-slate-900:hover,
+html.light .hover\:bg-slate-900\/60:hover,
+html.light .hover\:bg-slate-900\/80:hover,
+html.light .hover\:bg-slate-900\/90:hover {
+  background-color: #f8fafc !important;
+}
+
+html.light .hover\:bg-slate-800:hover,
+html.light .hover\:bg-slate-800\/40:hover,
+html.light .hover\:bg-slate-800\/80:hover {
+  background-color: #e2e8f0 !important;
+}
+
+/* Input, select, and textarea controls in Light Mode */
+html.light input:not([type="checkbox"]):not([type="radio"]),
+html.light select,
+html.light textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Border overrides in Light Mode for fixed dark borders */
+html.light .border-slate-800,
+html.light .border-slate-800\/40,
+html.light .border-slate-800\/60,
+html.light .border-slate-800\/80,
+html.light .border-slate-700,
+html.light .border-slate-700\/40,
+html.light .border-slate-700\/60,
+html.light .border-slate-700\/80,
+html.light .border-slate-600 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Text readability in Light Mode */
+html.light .text-slate-100,
+html.light .text-slate-200,
+html.light .text-slate-900 {
+  color: #0f172a !important;
+}
+
+html.light .text-slate-300,
+html.light .text-slate-700 {
+  color: #334155 !important;
+}
+
+html.light .text-slate-400,
+html.light .text-slate-600 {
+  color: #475569 !important;
+}
+
+html.light .text-slate-500 {
+  color: #64748b !important;
+}
+
+/* Eliminate white-on-white text in cards/modals in Light Mode */
+html.light h1.text-white,
+html.light h2.text-white,
+html.light h3.text-white,
+html.light h4.text-white,
+html.light strong.text-white,
+html.light p.text-white {
+  color: #0f172a !important;
+}
+
+/* Vibrant high-contrast accent text in Light Mode */
+html.light .text-cyan-400,
+html.light .text-cyan-300 {
+  color: #0284c7 !important;
+}
+
+html.light .text-emerald-400,
+html.light .text-emerald-300 {
+  color: #059669 !important;
+}
+
+html.light .text-amber-400,
+html.light .text-amber-300 {
+  color: #d97706 !important;
+}
+
+html.light .text-violet-400,
+html.light .text-violet-300 {
+  color: #7c3aed !important;
+}
+
+html.light .text-rose-400,
+html.light .text-rose-300 {
+  color: #e11d48 !important;
+}
+
+/* Accent containers in Light Mode */
+html.light .bg-cyan-950\/20,
+html.light .bg-cyan-950\/30,
+html.light .bg-cyan-950\/40,
+html.light .bg-cyan-950\/50,
+html.light .bg-cyan-950\/60,
+html.light .bg-cyan-950\/80,
+html.light .bg-cyan-950 {
+  background-color: rgba(6, 182, 212, 0.12) !important;
+}
+
+html.light .bg-violet-950\/20,
+html.light .bg-violet-950\/30,
+html.light .bg-violet-950\/40,
+html.light .bg-violet-950\/50,
+html.light .bg-violet-950\/60,
+html.light .bg-violet-950 {
+  background-color: rgba(139, 92, 246, 0.12) !important;
+}
+
+html.light .bg-emerald-950\/20,
+html.light .bg-emerald-950\/30,
+html.light .bg-emerald-950\/40,
+html.light .bg-emerald-950\/60,
+html.light .bg-emerald-950 {
+  background-color: rgba(16, 185, 129, 0.12) !important;
+}
+
+html.light .bg-amber-950\/20,
+html.light .bg-amber-950\/30,
+html.light .bg-amber-950\/40,
+html.light .bg-amber-950\/60,
+html.light .bg-amber-950 {
+  background-color: rgba(245, 158, 11, 0.12) !important;
+}
+
+html.light .bg-rose-950\/20,
+html.light .bg-rose-950\/30,
+html.light .bg-rose-950\/40,
+html.light .bg-rose-950\/60,
+html.light .bg-rose-950 {
+  background-color: rgba(244, 63, 94, 0.12) !important;
+}
+
+/* Light mode card elevation & shadows */
+html.light .rounded-2xl.border,
+html.light .rounded-xl.border {
+  box-shadow: 0 4px 14px -2px rgba(15, 23, 42, 0.06), 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+}
+
+/* ----------------------------------------------------
+   Native App Shell Layout Stability Rules
+   Prevents middle content from sliding/wobbling left and right
+   ---------------------------------------------------- */
+html {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  width: 100% !important;
+  height: 100%;
+  overscroll-behavior-x: none !important;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  width: 100% !important;
+  min-height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  overscroll-behavior-x: none !important;
+  touch-action: pan-y pinch-zoom;
+  -webkit-overflow-scrolling: touch;
+}
+
+#root {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  width: 100% !important;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Contain horizontal scrollable areas so swipes do not leak to the main viewport */
+.overflow-x-auto {
+  overscroll-behavior-x: contain !important;
+  touch-action: pan-x pan-y !important;
+  -webkit-overflow-scrolling: touch;
+}
+

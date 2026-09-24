@@ -1,0 +1,145 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isMasterAdmin() {
+      return isAuthenticated() && (
+        (request.auth.token.email != null && (
+          request.auth.token.email.lower() == 'infosphere569@gmail.com' ||
+          request.auth.token.email.lower() == 'ayushgupt640@gmail.com'
+        ))
+      );
+    }
+
+    function isAdmin() {
+      return isMasterAdmin() || (
+        isAuthenticated() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', 'student') in ['admin', 'subadmin']
+      );
+    }
+
+    // User profiles: public read for leaderboard / battle display; write by owner or admins
+    match /users/{userId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update: if isOwner(userId) || isMasterAdmin() || isAdmin();
+      allow delete: if isMasterAdmin() || isAdmin();
+    }
+
+    // Curriculum: public read for all students; update by authenticated admin/users
+    match /curriculum/{subjectId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Battles: participants can create and update match state; admins can manage
+    match /battles/{battleId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAuthenticated() || isMasterAdmin() || isAdmin();
+    }
+
+    // User battle history: user can read and create their own battle records; admins can view/manage
+    match /user_battle_history/{recordId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isMasterAdmin() || isAdmin());
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAuthenticated() || isMasterAdmin() || isAdmin();
+    }
+
+    // Question attempts: authenticated users can read for usage analytics
+    match /attempts/{attemptId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isMasterAdmin() || isAdmin();
+    }
+
+    // Community Feed: doubts, notes, discussions & PYQ sharing
+    match /community_posts/{postId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAuthenticated() && (
+        resource.data.authorUid == request.auth.uid ||
+        (resource.data.userId != null && resource.data.userId == request.auth.uid) ||
+        isMasterAdmin() ||
+        isAdmin() ||
+        (request.auth.token.email != null && (
+          request.auth.token.email.lower() == 'ayushgupt640@gmail.com' ||
+          request.auth.token.email.lower() == 'infosphere569@gmail.com'
+        ))
+      );
+
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if isAuthenticated();
+        allow update: if isAuthenticated();
+        allow delete: if isAuthenticated() && (
+          resource.data.authorUid == request.auth.uid ||
+          (resource.data.userId != null && resource.data.userId == request.auth.uid) ||
+          isMasterAdmin() ||
+          isAdmin() ||
+          (request.auth.token.email != null && (
+            request.auth.token.email.lower() == 'ayushgupt640@gmail.com' ||
+            request.auth.token.email.lower() == 'infosphere569@gmail.com'
+          ))
+        );
+      }
+    }
+
+    // Notifications: student private notifications & challenges, plus system announcements
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAuthenticated();
+    }
+
+    // System broadcasts & announcements
+    match /broadcasts/{broadcastId} {
+      allow read: if true;
+      allow write: if isMasterAdmin() || isAdmin();
+    }
+
+    // Promotional popups & poster banners: read by all, manageable by admins, view/click metrics updateable
+    match /promotions/{promoId} {
+      allow read: if true;
+      allow create, delete: if isMasterAdmin() || isAdmin();
+      allow update: if isMasterAdmin() || isAdmin() || true;
+    }
+
+    // Platform telemetry statistics
+    match /platform/{statDoc} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Question Bank: persistent cache of AI-generated questions and practice problems
+    match /questions_bank/{questionId} {
+      allow read: if true;
+      allow create, update: if isAuthenticated();
+      allow delete: if isMasterAdmin() || isAdmin();
+    }
+
+    // Team Members: public read; managed by Master Admin and Sub-Admins in Admin Panel
+    match /team_members/{memberId} {
+      allow read: if true;
+      allow write: if isMasterAdmin() || isAdmin();
+    }
+
+    // Contact Inquiries: anyone can submit inquiries; read and managed by admins
+    match /contact_inquiries/{inquiryId} {
+      allow create: if true;
+      allow read, update, delete: if isMasterAdmin() || isAdmin();
+    }
+  }
+}
