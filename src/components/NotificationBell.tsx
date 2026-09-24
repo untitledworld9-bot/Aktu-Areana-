@@ -440,20 +440,20 @@ export const NotificationBell: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.96 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
-            className="fixed left-3 right-3 top-16 sm:absolute sm:left-auto sm:right-0 sm:top-full mt-2 sm:mt-3 w-auto sm:w-96 max-h-[82vh] flex flex-col bg-[#090D16]/98 backdrop-blur-2xl rounded-2xl border border-slate-800/90 shadow-[0_20px_60px_rgba(0,0,0,0.9)] z-50 overflow-hidden"
+            className="fixed left-3 right-3 top-16 sm:absolute sm:left-auto sm:right-0 sm:top-full mt-2 sm:mt-3 w-auto sm:w-96 max-h-[82vh] flex flex-col bg-white/98 dark:bg-[#090D16]/98 backdrop-blur-2xl rounded-2xl border border-slate-200 dark:border-slate-800/90 shadow-[0_20px_60px_rgba(0,0,0,0.4)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.9)] z-50 overflow-hidden"
           >
             {/* Header */}
-            <div className="p-4 border-b border-slate-800/80 bg-slate-900/40">
+            <div className="p-4 border-b border-slate-200 dark:border-slate-800/80 bg-slate-50/80 dark:bg-slate-900/40">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+                  <div className="p-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-600 dark:text-cyan-400">
                     <Bell className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-slate-100 font-['Outfit']">
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 font-['Outfit']">
                       Recent Activity
                     </h3>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
                       Challenges, streaks & milestones
                     </p>
                   </div>
@@ -464,7 +464,7 @@ export const NotificationBell: React.FC = () => {
                     <button
                       onClick={handleMarkAllAsRead}
                       title="Mark all as read"
-                      className="flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-medium text-cyan-400 hover:text-cyan-300 hover:bg-cyan-950/60 border border-cyan-800/40 transition-colors"
+                      className="flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-medium text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300 bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-200 dark:border-cyan-800/40 transition-colors cursor-pointer"
                     >
                       <CheckCheck className="w-3.5 h-3.5" />
                       <span>Read all</span>
@@ -472,7 +472,7 @@ export const NotificationBell: React.FC = () => {
                   )}
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -481,21 +481,21 @@ export const NotificationBell: React.FC = () => {
 
               {/* Push Notification outside PWA Banner */}
               {pushStatus !== 'granted' && isPushSupported() && (
-                <div className="mx-0 my-2 p-2.5 rounded-xl bg-gradient-to-r from-cyan-950/60 to-slate-900 border border-cyan-500/40 flex items-center justify-between gap-2 shadow-sm">
+                <div className="mx-0 my-2 p-2.5 rounded-xl bg-gradient-to-r from-cyan-50 to-slate-100 dark:from-cyan-950/60 dark:to-slate-900 border border-cyan-200 dark:border-cyan-500/40 flex items-center justify-between gap-2 shadow-sm">
                   <div className="flex items-center gap-2 min-w-0">
-                    <BellRing className="w-4 h-4 text-cyan-400 shrink-0 animate-pulse" />
+                    <BellRing className="w-4 h-4 text-cyan-600 dark:text-cyan-400 shrink-0 animate-pulse" />
                     <div className="min-w-0">
-                      <div className="text-[11px] font-bold text-cyan-200 truncate">
+                      <div className="text-[11px] font-bold text-cyan-900 dark:text-cyan-200 truncate">
                         Notifications Outside PWA
                       </div>
-                      <div className="text-[10px] text-slate-400 truncate">
+                      <div className="text-[10px] text-slate-600 dark:text-slate-400 truncate">
                         Get instant alerts when closed or minimized
                       </div>
                     </div>
                   </div>
                   <button
                     onClick={handleRequestPush}
-                    className="px-2.5 py-1 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-[11px] transition-transform active:scale-95 shrink-0 shadow-sm cursor-pointer"
+                    className="px-2.5 py-1 rounded-lg bg-cyan-600 dark:bg-cyan-500 hover:bg-cyan-500 dark:hover:bg-cyan-400 text-white dark:text-slate-950 font-bold text-[11px] transition-transform active:scale-95 shrink-0 shadow-sm cursor-pointer"
                   >
                     Allow
                   </button>
@@ -503,28 +503,28 @@ export const NotificationBell: React.FC = () => {
               )}
 
               {/* Filter Tabs */}
-              <div className="flex items-center gap-2 mt-3 pt-2 border-t border-slate-800/60">
+              <div className="flex items-center gap-2 mt-3 pt-2 border-t border-slate-200 dark:border-slate-800/60">
                 <button
                   onClick={() => setFilter('all')}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                     filter === 'all'
-                      ? 'bg-slate-800 text-cyan-300 border border-slate-700'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-slate-200 dark:bg-slate-800 text-cyan-700 dark:text-cyan-300 border border-slate-300 dark:border-slate-700'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
                   }`}
                 >
                   All ({notifications.length})
                 </button>
                 <button
                   onClick={() => setFilter('unread')}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
                     filter === 'unread'
-                      ? 'bg-slate-800 text-cyan-300 border border-slate-700'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-slate-200 dark:bg-slate-800 text-cyan-700 dark:text-cyan-300 border border-slate-300 dark:border-slate-700'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
                   }`}
                 >
                   <span>Unread</span>
                   {unreadCount > 0 && (
-                    <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                    <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-rose-500/20 text-rose-600 dark:text-rose-300 border border-rose-500/30 font-bold">
                       {unreadCount}
                     </span>
                   )}
@@ -533,7 +533,7 @@ export const NotificationBell: React.FC = () => {
             </div>
 
             {/* Notification Items List */}
-            <div className="overflow-y-auto max-h-[380px] p-2 space-y-2 divide-y divide-slate-800/30">
+            <div className="overflow-y-auto max-h-[380px] p-2 space-y-2 divide-y divide-slate-200 dark:divide-slate-800/30">
               {loading ? (
                 <div className="py-12 flex flex-col items-center justify-center text-slate-400 gap-2">
                   <div className="w-6 h-6 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
@@ -541,10 +541,10 @@ export const NotificationBell: React.FC = () => {
                 </div>
               ) : filteredNotifications.length === 0 ? (
                 <div className="py-10 px-4 text-center flex flex-col items-center justify-center">
-                  <div className="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 mb-3">
+                  <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-400 mb-3">
                     <Inbox className="w-6 h-6" />
                   </div>
-                  <p className="text-sm font-medium text-slate-300">
+                  <p className="text-sm font-medium text-slate-800 dark:text-slate-300">
                     {filter === 'unread' ? 'All caught up!' : 'No notifications yet'}
                   </p>
                   <p className="text-xs text-slate-500 mt-1 max-w-[240px]">
@@ -561,8 +561,8 @@ export const NotificationBell: React.FC = () => {
                       onClick={() => handleNotificationClick(notif)}
                       className={`group relative p-3 rounded-xl transition-all cursor-pointer border ${
                         !notif.read
-                          ? 'bg-gradient-to-r from-slate-900/90 to-cyan-950/20 border-cyan-500/30 hover:border-cyan-500/60 shadow-[0_2px_12px_rgba(6,182,212,0.06)]'
-                          : 'bg-slate-900/40 border-slate-800/60 hover:bg-slate-900/80 hover:border-slate-700/80'
+                          ? 'bg-cyan-50/60 dark:bg-gradient-to-r dark:from-slate-900/90 dark:to-cyan-950/20 border-cyan-300 dark:border-cyan-500/30 hover:border-cyan-500 shadow-sm'
+                          : 'bg-slate-50/80 dark:bg-slate-900/40 border-slate-200/80 dark:border-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-900/80'
                       }`}
                     >
                       <div className="flex items-start gap-3">
@@ -571,7 +571,7 @@ export const NotificationBell: React.FC = () => {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-1 mb-1">
                             <h4 className={`text-xs font-semibold leading-snug line-clamp-1 ${
-                              !notif.read ? 'text-slate-100 font-bold' : 'text-slate-300'
+                              !notif.read ? 'text-slate-900 dark:text-slate-100 font-bold' : 'text-slate-700 dark:text-slate-300'
                             }`}>
                               {notif.title}
                             </h4>
@@ -580,7 +580,7 @@ export const NotificationBell: React.FC = () => {
                             </span>
                           </div>
 
-                          <p className="text-[11px] text-slate-400 leading-relaxed line-clamp-2">
+                          <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2">
                             {notif.message}
                           </p>
 

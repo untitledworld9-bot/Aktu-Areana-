@@ -16,6 +16,9 @@ import { GlassCard } from './ui/GlassCard';
 import { useArena } from '../context/ArenaContext';
 import { AKTU_BRANCHES } from '../data/branches';
 import { UserProfileModal } from './UserProfileModal';
+import { generateAIQuestions } from '../services/aiService';
+import { getSubjectsForBranch } from '../data/aktuCurriculum';
+import { Branch } from '../types';
 
 interface LeaderboardUser {
   uid: string;
@@ -31,7 +34,7 @@ interface LeaderboardUser {
 }
 
 export const LeaderboardView: React.FC = () => {
-  const { profile, curriculum } = useArena();
+  const { profile, curriculum, setCurrentTab, setPendingBattleRoomId } = useArena();
   const [activeTab, setActiveTab] = useState<'global' | 'branch'>('global');
   const [selectedBranch, setSelectedBranch] = useState<string>('All');
   const [searchTerm, setSearchTerm] = useState('');
@@ -49,23 +52,72 @@ export const LeaderboardView: React.FC = () => {
   const handleChallengeUser = async (targetUser: LeaderboardUser) => {
     if (!profile?.uid) return;
     try {
+      setChallengedIds((prev) => ({ ...prev, [targetUser.uid]: true }));
+
+      const branchSubs = getSubjectsForBranch((profile.branch as Branch) || 'CSE', curriculum);
+      const selectedSub = branchSubs[0] || curriculum[0];
+
+      // 1. Generate questions
+      const qList = await generateAIQuestions({
+        subject: selectedSub.subjectName,
+        subjectId: selectedSub.subjectId,
+        unit: 1,
+        topic: selectedSub.units[0]?.topics[0] || 'Core Principles',
+        difficulty: 'Medium',
+        questionCount: 5,
+        questionType: 'MCQ',
+        branch: profile.branch || 'CSE',
+        academicSession: '2026–27',
+      });
+
+      // 2. Create the room in Firestore
+      const newRoomRef = await addDoc(collection(db, 'battles'), {
+        subjectId: selectedSub.subjectId,
+        subjectName: selectedSub.subjectName,
+        topic: selectedSub.units[0]?.topics[0] || 'Core Principles',
+        difficulty: 'Medium',
+        questionCount: 5,
+        status: 'waiting',
+        challengeTargetUid: targetUser.uid,
+        player1: {
+          uid: profile.uid,
+          displayName: profile.displayName || 'Engineer',
+          branch: `${profile.branch} (${profile.collegeName || profile.university || 'AKTU'})`,
+          score: 0,
+          currentQuestionIndex: 0,
+          isFinished: false,
+        },
+        player2: null,
+        questions: qList,
+        createdAt: new Date().toISOString(),
+      });
+
+      // 3. Send notification with battleId
       await addDoc(collection(db, 'notifications'), {
         userId: targetUser.uid,
         type: 'battle_challenge',
-        title: `Live Battle Challenge`,
-        message: `${profile.displayName || 'An AKTU Engineer'} (${profile.branch}) challenged you to a 1v1 speed duel in B.Tech subjects!`,
+        title: `⚔️ Live 1v1 Battle Challenge!`,
+        message: `${profile.displayName || 'An AKTU Engineer'} (${profile.branch}) challenged you to a 1v1 speed duel in ${selectedSub.subjectName}!`,
         read: false,
         createdAt: new Date().toISOString(),
         actionTab: 'battle',
+        battleId: newRoomRef.id,
+        subjectId: selectedSub.subjectId,
+        subjectName: selectedSub.subjectName,
         fromUserName: profile.displayName || 'Peer',
         fromUserId: profile.uid,
+        fromUserBranch: profile.branch || 'CSE',
+        fromUserCollege: profile.collegeName || 'AKTU',
+        status: 'pending',
       });
-      setChallengedIds((prev) => ({ ...prev, [targetUser.uid]: true }));
-      setTimeout(() => {
-        setChallengedIds((prev) => ({ ...prev, [targetUser.uid]: false }));
-      }, 5000);
-    } catch (e) {
+
+      // 4. Redirect challenger to battle waiting room
+      setPendingBattleRoomId(newRoomRef.id);
+      setCurrentTab('battle');
+    } catch (e: any) {
       console.error('Failed to send challenge notification:', e);
+      alert('Could not start duel: ' + e.message);
+      setChallengedIds((prev) => ({ ...prev, [targetUser.uid]: false }));
     }
   };
 

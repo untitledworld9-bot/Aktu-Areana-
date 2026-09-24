@@ -471,14 +471,16 @@ export const AILab: React.FC<AILabProps> = ({ onStartChallenge }) => {
                           const hasAnswered = !!userChoice;
                           const isSelected = userChoice === opt;
                           const isCorrect = q.correctAnswer === opt;
-                          const showCorrect = (hasAnswered || isExpanded) && isCorrect;
-                          const showWrong = hasAnswered && isSelected && !isCorrect;
+                          const showCorrect = isExpanded && isCorrect;
+                          const showWrong = isExpanded && hasAnswered && isSelected && !isCorrect;
 
                           let btnStyle = 'bg-slate-950/70 border-slate-800 text-slate-300 hover:border-cyan-500/40 hover:bg-slate-900';
                           if (showCorrect) {
                             btnStyle = 'bg-emerald-950/50 border-emerald-500 text-emerald-100 font-semibold shadow-[0_0_12px_rgba(16,185,129,0.25)]';
                           } else if (showWrong) {
                             btnStyle = 'bg-rose-950/50 border-rose-500 text-rose-100 font-semibold';
+                          } else if (isSelected) {
+                            btnStyle = 'bg-cyan-950/40 border-cyan-400 text-cyan-200 font-semibold';
                           }
 
                           return (
@@ -501,13 +503,18 @@ export const AILab: React.FC<AILabProps> = ({ onStartChallenge }) => {
                                   <span>Your Pick ❌</span>
                                 </span>
                               )}
+                              {!isExpanded && isSelected && (
+                                <span className="flex items-center gap-1 text-[10px] font-bold text-cyan-400 bg-cyan-950/90 px-2 py-0.5 rounded-md border border-cyan-500/40 shrink-0">
+                                  <span>Selected Pick</span>
+                                </span>
+                              )}
                             </button>
                           );
                         })}
                       </div>
 
-                      {/* Instant evaluation prompt after clicking */}
-                      {previewAnswers[q.id] && (
+                      {/* Evaluation prompt when solution is expanded */}
+                      {isExpanded && previewAnswers[q.id] && (
                         <div className={`p-3 rounded-xl border text-xs flex items-center justify-between gap-2 ${
                           previewAnswers[q.id] === q.correctAnswer
                             ? 'bg-emerald-950/30 border-emerald-500/30 text-emerald-300'
@@ -525,14 +532,6 @@ export const AILab: React.FC<AILabProps> = ({ onStartChallenge }) => {
                                 : `Incorrect selection. The correct option is highlighted above.`}
                             </span>
                           </div>
-                          {!isExpanded && (
-                            <button
-                              onClick={() => toggleSolution(q.id)}
-                              className="text-[11px] font-bold underline text-cyan-300 hover:text-cyan-200 shrink-0 cursor-pointer"
-                            >
-                              See Solution
-                            </button>
-                          )}
                         </div>
                       )}
                     </div>
