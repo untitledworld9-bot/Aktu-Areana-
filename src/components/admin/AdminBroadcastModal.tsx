@@ -222,7 +222,7 @@ export const AdminBroadcastModal: React.FC<AdminBroadcastModalProps> = ({ onClos
                     onChange={(e) => setActionTab(e.target.value as AppTab)}
                     className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-slate-100 focus:outline-none focus:border-cyan-500"
                   >
-                    <option value="dashboard">Command Center (Dashboard)</option>
+                    <option value="dashboard">Home (Dashboard)</option>
                     <option value="battle">Live Battle Arena (1v1)</option>
                     <option value="ailab">AI Practice Lab</option>
                     <option value="leaderboard">AKTU Rankings</option>

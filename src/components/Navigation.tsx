@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  Compass, 
+  Home, 
   BookOpen, 
   Swords, 
   MessageSquare,
@@ -44,7 +44,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenAuth }) => {
   }
 
   const navItems: NavItem[] = [
-    { id: 'dashboard', label: 'Command Center', icon: Compass },
+    { id: 'dashboard', label: 'Home', icon: Home },
     { id: 'ailab', label: 'Practice Lab', icon: BookOpen },
     { id: 'battle', label: 'Live Battle', icon: Swords, badge: '1v1' },
     { id: 'community', label: 'Community', icon: MessageSquare },
@@ -81,7 +81,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenAuth }) => {
           <div 
             onClick={() => setCurrentTab('dashboard')}
             className="flex items-center gap-2.5 sm:gap-3 cursor-pointer group min-w-0"
-            title="Command Center"
+            title="Home"
           >
             <div className="w-9 h-9 rounded-xl bg-[#07090E] border border-cyan-500/40 p-0.5 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.3)]">
               <img 
@@ -173,8 +173,8 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenAuth }) => {
                 currentTab === 'dashboard' ? 'bg-slate-800 text-cyan-300 border border-slate-700 font-bold' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              <Compass className="w-3.5 h-3.5" />
-              <span>Dashboard</span>
+              <Home className="w-3.5 h-3.5" />
+              <span>Home</span>
             </button>
             <button
               onClick={() => setCurrentTab('ailab')}
@@ -323,7 +323,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenAuth }) => {
                 currentTab === 'dashboard' ? 'text-cyan-700 dark:text-cyan-400 scale-105' : 'text-slate-500 dark:text-slate-400'
               }`}
             >
-              <Compass className={`w-5 h-5 mb-0.5 ${currentTab === 'dashboard' ? 'text-cyan-700 dark:text-cyan-400' : 'text-slate-500 dark:text-slate-400'}`} />
+              <Home className={`w-5 h-5 mb-0.5 ${currentTab === 'dashboard' ? 'text-cyan-700 dark:text-cyan-400' : 'text-slate-500 dark:text-slate-400'}`} />
               <span className="truncate">Home</span>
             </button>
             <button

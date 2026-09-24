@@ -50,7 +50,7 @@ export const PAGE_SEO_CONFIG: Record<AppTab, PageMetadata> = {
     },
   },
   dashboard: {
-    title: 'Command Center — Daily Study Targets & Progress | AKTU Arena',
+    title: 'Home Dashboard — Daily Study Targets & Progress | AKTU Arena',
     description: 'Track daily question goals, review subject accuracy, monitor 750+ college leaderboard rank, and jump into instant practice on AKTU Arena.',
     canonicalPath: '/#dashboard',
   },

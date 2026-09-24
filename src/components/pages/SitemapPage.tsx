@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Map, 
-  Compass, 
+  Home, 
   BookOpen, 
   Swords, 
   MessageSquare, 
@@ -57,11 +57,11 @@ export const SitemapPage: React.FC = () => {
     authRequired?: boolean;
   }> = [
     {
-      title: 'Command Center (Dashboard)',
+      title: 'Home (Dashboard)',
       tab: 'dashboard',
       hash: '#dashboard',
       desc: 'Central overview of your daily question targets, study streak, accuracy metrics, and quick practice launchpad.',
-      icon: Compass,
+      icon: Home,
       badge: 'Core Hub',
       authRequired: true,
     },

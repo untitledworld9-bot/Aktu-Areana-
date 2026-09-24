@@ -207,7 +207,7 @@ const ArenaApp: React.FC = () => {
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="text-sm sm:text-base font-bold text-slate-100 font-['Outfit']">
-                        AKTU Arena Command Center
+                        AKTU Arena Home Dashboard
                       </span>
                       <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
                         Guest Mode

@@ -140,7 +140,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAuth }) => {
                   className="hover:text-cyan-400 transition-colors flex items-center gap-1.5 text-left"
                 >
                   <ChevronRight className="w-3 h-3 text-cyan-500/50 shrink-0" />
-                  <span>Command Center</span>
+                  <span>Home Dashboard</span>
                 </button>
               </li>
               <li>
