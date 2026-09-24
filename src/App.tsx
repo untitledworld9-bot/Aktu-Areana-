@@ -50,15 +50,20 @@ const ArenaApp: React.FC = () => {
   // When launching as installed PWA / standalone on mobile:
   // If not logged in, auto-open AuthModal so the student can sign in with 1-click Google immediately!
   useEffect(() => {
-    if (!user && !profile && !loading) {
-      const isStandalone = typeof window !== 'undefined' && (
-        window.matchMedia('(display-mode: standalone)').matches ||
-        (window.navigator as any).standalone === true ||
-        new URLSearchParams(window.location.search).get('source') === 'pwa'
-      );
-      if (isStandalone) {
-        setAuthModalOpen(true);
-      }
+    const isStandalone = typeof window !== 'undefined' && (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as any).standalone === true ||
+      new URLSearchParams(window.location.search).get('source') === 'pwa'
+    );
+
+    if (user || isStandalone) {
+      document.body.classList.add('app-mode');
+    } else {
+      document.body.classList.remove('app-mode');
+    }
+
+    if (!user && !profile && !loading && isStandalone) {
+      setAuthModalOpen(true);
     }
   }, [user, profile, loading]);
 

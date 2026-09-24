@@ -880,13 +880,43 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ onOpenAuth }) => {
 
   // 9. Post Share with native Web Share API (mobile/desktop apps) & copy fallback
   const handleShare = async (post: CommunityPost) => {
-    const threadUrl = `${window.location.origin}/?post=${encodeURIComponent(post.id)}#community?post=${encodeURIComponent(post.id)}`;
-    
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://aktuareana.netlify.app';
+    const threadUrl = `${origin}/?post=${encodeURIComponent(post.id)}#community?post=${encodeURIComponent(post.id)}`;
+    const shareTitle = `${post.title} — AKTU Arena`;
+    const shareSnippet = post.content ? (post.content.length > 120 ? post.content.slice(0, 117) + '...' : post.content) : '';
+    const shareText = `📌 *${post.title}*\n\n${shareSnippet}\n\n🔗 Read AKTU B.Tech discussion on AKTU Arena:`;
+
+    // Try sharing with real image file if post has an uploaded image
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
+        if (post.imageUrl && navigator.canShare) {
+          try {
+            const response = await fetch(post.imageUrl, { mode: 'cors' });
+            if (response.ok) {
+              const blob = await response.blob();
+              const ext = blob.type.includes('png') ? 'png' : 'jpg';
+              const file = new File([blob], `aktu-post-${post.id}.${ext}`, { type: blob.type || 'image/jpeg' });
+              
+              if (navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                  title: shareTitle,
+                  text: `${shareText}\n${threadUrl}`,
+                  files: [file],
+                });
+                setCopiedPostId(post.id);
+                setTimeout(() => setCopiedPostId(null), 2500);
+                return;
+              }
+            }
+          } catch (fileShareErr) {
+            console.log('File share fallback:', fileShareErr);
+          }
+        }
+
+        // Standard navigator.share
         await navigator.share({
-          title: `${post.title} — AKTU Arena`,
-          text: `${post.title}\n\nRead this AKTU B.Tech engineering discussion on AKTU Arena:`,
+          title: shareTitle,
+          text: shareText,
           url: threadUrl,
         });
         setCopiedPostId(post.id);

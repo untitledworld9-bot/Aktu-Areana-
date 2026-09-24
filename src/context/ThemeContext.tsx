@@ -40,6 +40,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setResolvedTheme(active);
 
       const root = document.documentElement;
+      const themeColor = active === 'dark' ? '#07090E' : '#F8FAFC';
+      const statusBarStyle = active === 'dark' ? 'black-translucent' : 'default';
+
       if (active === 'dark') {
         root.classList.add('dark');
         root.classList.remove('light');
@@ -49,6 +52,24 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         root.classList.remove('dark');
         root.style.colorScheme = 'light';
       }
+
+      // Sync mobile status bar & browser navigation color
+      let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+      if (!metaThemeColor) {
+        metaThemeColor = document.createElement('meta');
+        metaThemeColor.setAttribute('name', 'theme-color');
+        document.head.appendChild(metaThemeColor);
+      }
+      metaThemeColor.setAttribute('content', themeColor);
+
+      // Sync Apple iOS Status Bar style
+      let metaAppleStatusBar = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+      if (!metaAppleStatusBar) {
+        metaAppleStatusBar = document.createElement('meta');
+        metaAppleStatusBar.setAttribute('name', 'apple-mobile-web-app-status-bar-style');
+        document.head.appendChild(metaAppleStatusBar);
+      }
+      metaAppleStatusBar.setAttribute('content', statusBarStyle);
     };
 
     applyTheme();

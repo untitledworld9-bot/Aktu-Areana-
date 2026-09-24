@@ -277,3 +277,62 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+/* ----------------------------------------------------
+   Native Mobile PWA App Experience Rules
+   - Blocks accidental UI text selection on buttons, tabs, headers, icons
+   - Disables double-tap and pinch zoom wobble in App Mode
+   - Native tap highlight transparent
+   ---------------------------------------------------- */
+:root {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Fast tap, no double-tap zoom delay */
+button,
+a,
+input,
+select,
+textarea,
+[role="button"],
+[role="tab"] {
+  touch-action: manipulation;
+}
+
+/* Block accidental UI text selection on navigation, buttons, tabs, badges */
+body.app-mode,
+body.app-mode button,
+body.app-mode [role="button"],
+body.app-mode [role="tab"],
+body.app-mode nav,
+body.app-mode header,
+body.app-mode .select-none,
+body.app-mode .app-ui-no-select {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+
+/* Preserve selection on readable study content, code, questions, formulas, inputs */
+body.app-mode input,
+body.app-mode textarea,
+body.app-mode pre,
+body.app-mode code,
+body.app-mode .selectable-text,
+body.app-mode article,
+body.app-mode .prose,
+body.app-mode .math-content {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
+
+/* Disable unwanted pull-to-refresh / rubberband zoom in App Mode */
+body.app-mode {
+  touch-action: pan-y !important;
+  overscroll-behavior-y: contain !important;
+}
+
+
