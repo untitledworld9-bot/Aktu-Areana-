@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Favicons & PWA Assets
+Allow: /icon.svg
+Allow: /favicon.png
+Allow: /pwa-192x192.png
+Allow: /pwa-512x512.png
+Allow: /apple-touch-icon.png
+Allow: /manifest.webmanifest
+
+Sitemap: https://aktuareana.netlify.app/sitemap.xml
