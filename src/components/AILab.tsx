@@ -11,7 +11,10 @@ import {
   Clock,
   Zap,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  AlertCircle,
+  Check,
+  X
 } from 'lucide-react';
 import { GlassCard } from './ui/GlassCard';
 import { useArena } from '../context/ArenaContext';
@@ -70,6 +73,7 @@ export const AILab: React.FC<AILabProps> = ({ onStartChallenge }) => {
   const [generationStep, setGenerationStep] = useState(0);
   const [generatedQuestions, setGeneratedQuestions] = useState<Question[] | null>(null);
   const [expandedSolutions, setExpandedSolutions] = useState<{ [qId: string]: boolean }>({});
+  const [previewAnswers, setPreviewAnswers] = useState<{ [qId: string]: string }>({});
 
   const currentSubject = selectableSubjects.find((s) => s.subjectId === selectedSubjectId) || selectableSubjects[0] || curriculum[0];
   const currentUnit = currentSubject.units.find((u) => u.unitNumber === selectedUnitNum) || currentSubject.units[0];
@@ -89,6 +93,7 @@ export const AILab: React.FC<AILabProps> = ({ onStartChallenge }) => {
     setIsGenerating(true);
     setGenerationStep(0);
     setGeneratedQuestions(null);
+    setPreviewAnswers({});
 
     // Snappy sequence animation loop
     const stepInterval = setInterval(() => {
@@ -459,15 +464,77 @@ export const AILab: React.FC<AILabProps> = ({ onStartChallenge }) => {
                   </div>
 
                   {q.options && q.options.length > 0 && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
-                      {q.options.map((opt, oIdx) => (
-                        <div
-                          key={oIdx}
-                          className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 text-xs text-slate-300"
-                        >
-                          {opt}
+                    <div className="space-y-2 mb-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        {q.options.map((opt, oIdx) => {
+                          const userChoice = previewAnswers[q.id];
+                          const hasAnswered = !!userChoice;
+                          const isSelected = userChoice === opt;
+                          const isCorrect = q.correctAnswer === opt;
+                          const showCorrect = (hasAnswered || isExpanded) && isCorrect;
+                          const showWrong = hasAnswered && isSelected && !isCorrect;
+
+                          let btnStyle = 'bg-slate-950/70 border-slate-800 text-slate-300 hover:border-cyan-500/40 hover:bg-slate-900';
+                          if (showCorrect) {
+                            btnStyle = 'bg-emerald-950/50 border-emerald-500 text-emerald-100 font-semibold shadow-[0_0_12px_rgba(16,185,129,0.25)]';
+                          } else if (showWrong) {
+                            btnStyle = 'bg-rose-950/50 border-rose-500 text-rose-100 font-semibold';
+                          }
+
+                          return (
+                            <button
+                              key={oIdx}
+                              type="button"
+                              onClick={() => setPreviewAnswers((prev) => ({ ...prev, [q.id]: opt }))}
+                              className={`p-3.5 rounded-xl border text-left text-xs transition-all flex items-start justify-between gap-2.5 cursor-pointer ${btnStyle}`}
+                            >
+                              <span className="flex-1 min-w-0 break-words leading-relaxed">{opt}</span>
+                              {showCorrect && (
+                                <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-950/90 px-2 py-0.5 rounded-md border border-emerald-500/40 shrink-0">
+                                  <CheckCircle2 className="w-3.5 h-3.5" />
+                                  <span>{isSelected ? 'Your Pick ✅' : 'Correct Answer'}</span>
+                                </span>
+                              )}
+                              {showWrong && (
+                                <span className="flex items-center gap-1 text-[10px] font-bold text-rose-400 bg-rose-950/90 px-2 py-0.5 rounded-md border border-rose-500/40 shrink-0">
+                                  <AlertCircle className="w-3.5 h-3.5" />
+                                  <span>Your Pick ❌</span>
+                                </span>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Instant evaluation prompt after clicking */}
+                      {previewAnswers[q.id] && (
+                        <div className={`p-3 rounded-xl border text-xs flex items-center justify-between gap-2 ${
+                          previewAnswers[q.id] === q.correctAnswer
+                            ? 'bg-emerald-950/30 border-emerald-500/30 text-emerald-300'
+                            : 'bg-rose-950/30 border-rose-500/30 text-rose-300'
+                        }`}>
+                          <div className="flex items-center gap-2">
+                            {previewAnswers[q.id] === q.correctAnswer ? (
+                              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                            ) : (
+                              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                            )}
+                            <span className="font-semibold">
+                              {previewAnswers[q.id] === q.correctAnswer
+                                ? 'Spot on! You selected the verified correct answer.'
+                                : `Incorrect selection. The correct option is highlighted above.`}
+                            </span>
+                          </div>
+                          {!isExpanded && (
+                            <button
+                              onClick={() => toggleSolution(q.id)}
+                              className="text-[11px] font-bold underline text-cyan-300 hover:text-cyan-200 shrink-0 cursor-pointer"
+                            >
+                              See Solution
+                            </button>
+                          )}
                         </div>
-                      ))}
+                      )}
                     </div>
                   )}
 
@@ -475,21 +542,22 @@ export const AILab: React.FC<AILabProps> = ({ onStartChallenge }) => {
                   <div className="pt-3 border-t border-slate-800/80">
                     <button
                       onClick={() => toggleSolution(q.id)}
-                      className="flex items-center gap-1.5 text-xs font-semibold text-cyan-400 hover:text-cyan-300"
+                      className="flex items-center gap-1.5 text-xs font-semibold text-cyan-400 hover:text-cyan-300 cursor-pointer"
                     >
                       <span>{isExpanded ? 'Hide Solution Key' : 'Reveal Solution Key & Explanation'}</span>
                       {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </button>
 
                     {isExpanded && (
-                      <div className="mt-3 p-4 rounded-xl bg-cyan-950/30 border border-cyan-500/30 text-xs space-y-2">
-                        <div className="font-bold text-cyan-300">
-                          Correct Answer: {q.correctAnswer}
+                      <div className="mt-3 p-4 rounded-xl bg-cyan-950/30 border border-cyan-500/30 text-xs space-y-2 animate-fadeIn">
+                        <div className="font-bold text-cyan-300 flex items-center gap-1.5">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                          <span>Correct Answer: {q.correctAnswer}</span>
                         </div>
                         <div className="text-slate-300 leading-relaxed">
                           {q.explanation}
                         </div>
-                        <div className="text-[10px] text-slate-400 pt-1">
+                        <div className="text-[10px] text-slate-400 pt-1 border-t border-slate-800/80">
                           Source Context: {q.sourceContext}
                         </div>
                       </div>

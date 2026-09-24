@@ -103,8 +103,44 @@ export interface UserProfile {
   banReason?: string;
   bannedAt?: string;
   bannedBy?: string;
+  bio?: string;
+  followersCount?: number;
+  followingCount?: number;
+  followers?: string[];
+  following?: string[];
   createdAt: string;
   updatedAt?: string;
+}
+
+export interface PublicUserProfile {
+  uid: string;
+  displayName: string;
+  photoURL?: string;
+  collegeName?: string;
+  university: string;
+  branch: Branch;
+  year: Year;
+  xp: number;
+  level: number;
+  streak: number;
+  accuracy: number;
+  questionsSolved: number;
+  battlesPlayed: number;
+  battlesWon: number;
+  followersCount: number;
+  followingCount: number;
+  followers: string[];
+  following: string[];
+  bio?: string;
+  role: UserRole;
+  subjectStats?: {
+    [subjectId: string]: {
+      solved: number;
+      correct: number;
+      xp?: number;
+    };
+  };
+  achievements?: string[];
 }
 
 export interface LiveStats {

@@ -44,6 +44,7 @@ import {
 import { useArena } from '../context/ArenaContext';
 import { CommunityPost, CommunityComment, UserRole } from '../types';
 import { PullToRefresh } from './ui/PullToRefresh';
+import { UserProfileModal } from './UserProfileModal';
 import { 
   collection, 
   query, 
@@ -76,7 +77,7 @@ interface CommunityViewProps {
 }
 
 export const CommunityView: React.FC<CommunityViewProps> = ({ onOpenAuth }) => {
-  const { user, profile, isAdmin, isMasterAdmin } = useArena();
+  const { user, profile, isAdmin, isMasterAdmin, followUser, unfollowUser } = useArena();
   
   const [posts, setPosts] = useState<CommunityPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -84,6 +85,36 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ onOpenAuth }) => {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [targetedPostId, setTargetedPostId] = useState<string | null>(null);
+
+  // Student Profile Modal (Instagram style) State
+  const [selectedProfileUid, setSelectedProfileUid] = useState<string | null>(null);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+  const openUserProfile = (uid?: string) => {
+    if (!uid) return;
+    setSelectedProfileUid(uid);
+    setIsProfileModalOpen(true);
+  };
+
+  const isUserFollowed = (targetUid?: string) => {
+    if (!targetUid || !user || !profile) return false;
+    return (profile.following || []).includes(targetUid);
+  };
+
+  const handleToggleFollowUser = async (targetUid?: string) => {
+    if (!targetUid) return;
+    if (!user) {
+      onOpenAuth?.('login');
+      return;
+    }
+    if (targetUid === user.uid) return;
+
+    if (isUserFollowed(targetUid)) {
+      await unfollowUser(targetUid);
+    } else {
+      await followUser(targetUid);
+    }
+  };
 
   // Track unique post views
   const viewedPostsRef = useRef<Set<string>>(new Set());
@@ -1409,7 +1440,11 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ onOpenAuth }) => {
                   {/* Post Header */}
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-cyan-300 font-bold text-xs shrink-0 overflow-hidden">
+                      <div 
+                        onClick={() => openUserProfile(post.authorUid)}
+                        className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-cyan-300 font-bold text-xs shrink-0 overflow-hidden cursor-pointer hover:ring-2 hover:ring-cyan-500/50 transition-all"
+                        title={`View @${post.authorName}'s Profile`}
+                      >
                         {post.authorPhoto ? (
                           <img src={post.authorPhoto} alt={post.authorName} className="w-full h-full object-cover" />
                         ) : (
@@ -1419,9 +1454,31 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ onOpenAuth }) => {
 
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="text-xs font-bold text-slate-100 truncate">
+                          <span 
+                            onClick={() => openUserProfile(post.authorUid)}
+                            className="text-xs font-bold text-slate-100 hover:text-cyan-300 cursor-pointer truncate transition-colors"
+                          >
                             {post.authorName}
                           </span>
+
+                          {/* Quick Follow Button on Post Header */}
+                          {user && post.authorUid && post.authorUid !== user.uid && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggleFollowUser(post.authorUid);
+                              }}
+                              className={`text-[9px] font-bold px-2 py-0.5 rounded-full transition-all cursor-pointer ${
+                                isUserFollowed(post.authorUid)
+                                  ? 'bg-slate-800 text-slate-300 border border-slate-700 hover:bg-rose-950 hover:text-rose-300 hover:border-rose-700'
+                                  : 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 hover:bg-cyan-500 hover:text-slate-950'
+                              }`}
+                            >
+                              {isUserFollowed(post.authorUid) ? 'Following' : '+ Follow'}
+                            </button>
+                          )}
+
                           {post.authorRole === 'admin' && (
                             <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-mono font-bold">
                               ADMIN
@@ -1739,7 +1796,12 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ onOpenAuth }) => {
                                     {isNestedReply && (
                                       <CornerDownRight className="w-3 h-3 text-cyan-400 shrink-0" />
                                     )}
-                                    <span className="font-bold text-slate-200">{comm.authorName}</span>
+                                    <span 
+                                      onClick={() => openUserProfile(comm.authorUid)}
+                                      className="font-bold text-slate-200 hover:text-cyan-300 cursor-pointer transition-colors"
+                                    >
+                                      {comm.authorName}
+                                    </span>
                                     {comm.replyToAuthorName && (
                                       <span className="text-cyan-400 font-medium text-[10px] bg-cyan-950/50 px-1.5 py-0.2 rounded border border-cyan-500/30">
                                         @{comm.replyToAuthorName}
@@ -2412,6 +2474,16 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ onOpenAuth }) => {
           </div>
         </div>
       )}
+
+      {/* Instagram-Style Public Student Profile Modal */}
+      <UserProfileModal
+        isOpen={isProfileModalOpen}
+        targetUid={selectedProfileUid}
+        onClose={() => {
+          setIsProfileModalOpen(false);
+          setSelectedProfileUid(null);
+        }}
+      />
 
       </div>
     </PullToRefresh>

@@ -293,7 +293,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenAuth }) => {
       </header>
 
       {/* Mobile Bottom Navigation Bar (Rendered for both Logged In & Guest visitors) */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/95 dark:bg-[#07090E]/95 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 z-40 px-2 flex items-center justify-around shadow-lg">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/95 dark:bg-[#07090E]/95 backdrop-blur-2xl border-t border-slate-200 dark:border-slate-800/90 z-40 px-3 flex items-center justify-around shadow-2xl safe-area-pb">
         {hasSession ? (
           navItems.map((item) => {
             // Strictly hide admin tab for non-admins
@@ -304,14 +304,20 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenAuth }) => {
               <button
                 key={item.id}
                 onClick={() => setCurrentTab(item.id as any)}
-                className={`flex flex-col items-center justify-center w-12 h-12 rounded-xl text-[10px] font-semibold transition-all ${
+                className={`relative flex flex-col items-center justify-center flex-1 h-14 rounded-2xl text-[10px] font-bold transition-all cursor-pointer ${
                   isActive 
-                    ? 'text-cyan-700 dark:text-cyan-400 scale-105' 
+                    ? 'text-cyan-600 dark:text-cyan-400 font-extrabold' 
                     : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
                 }`}
               >
-                <Icon className={`w-5 h-5 mb-0.5 ${isActive ? 'text-cyan-700 dark:text-cyan-400' : 'text-slate-500 dark:text-slate-400'}`} />
-                <span className="truncate">{item.label.split(' ')[0]}</span>
+                {isActive && (
+                  <div className="absolute inset-x-2 inset-y-1 rounded-xl bg-cyan-500/10 dark:bg-cyan-500/15 -z-10 animate-fadeIn" />
+                )}
+                <Icon className={`w-5 h-5 mb-0.5 transition-transform ${isActive ? 'scale-110 text-cyan-600 dark:text-cyan-400' : 'text-slate-400 dark:text-slate-500'}`} />
+                <span className="truncate tracking-tight">{item.label.split(' ')[0]}</span>
+                {isActive && (
+                  <span className="w-1 h-1 rounded-full bg-cyan-500 dark:bg-cyan-400 mt-0.5" />
+                )}
               </button>
             );
           })
@@ -319,46 +325,58 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenAuth }) => {
           <>
             <button
               onClick={() => setCurrentTab('dashboard')}
-              className={`flex flex-col items-center justify-center w-12 h-12 rounded-xl text-[10px] font-semibold transition-all ${
-                currentTab === 'dashboard' ? 'text-cyan-700 dark:text-cyan-400 scale-105' : 'text-slate-500 dark:text-slate-400'
+              className={`relative flex flex-col items-center justify-center flex-1 h-14 rounded-2xl text-[10px] font-bold transition-all cursor-pointer ${
+                currentTab === 'dashboard' ? 'text-cyan-600 dark:text-cyan-400 font-extrabold' : 'text-slate-400 dark:text-slate-500'
               }`}
             >
-              <Home className={`w-5 h-5 mb-0.5 ${currentTab === 'dashboard' ? 'text-cyan-700 dark:text-cyan-400' : 'text-slate-500 dark:text-slate-400'}`} />
-              <span className="truncate">Home</span>
+              {currentTab === 'dashboard' && (
+                <div className="absolute inset-x-2 inset-y-1 rounded-xl bg-cyan-500/10 dark:bg-cyan-500/15 -z-10" />
+              )}
+              <Home className={`w-5 h-5 mb-0.5 ${currentTab === 'dashboard' ? 'scale-110 text-cyan-600 dark:text-cyan-400' : 'text-slate-400 dark:text-slate-500'}`} />
+              <span className="truncate tracking-tight">Home</span>
             </button>
             <button
               onClick={() => setCurrentTab('ailab')}
-              className={`flex flex-col items-center justify-center w-12 h-12 rounded-xl text-[10px] font-semibold transition-all ${
-                currentTab === 'ailab' ? 'text-cyan-700 dark:text-cyan-400 scale-105' : 'text-slate-500 dark:text-slate-400'
+              className={`relative flex flex-col items-center justify-center flex-1 h-14 rounded-2xl text-[10px] font-bold transition-all cursor-pointer ${
+                currentTab === 'ailab' ? 'text-cyan-600 dark:text-cyan-400 font-extrabold' : 'text-slate-400 dark:text-slate-500'
               }`}
             >
-              <BookOpen className={`w-5 h-5 mb-0.5 ${currentTab === 'ailab' ? 'text-cyan-700 dark:text-cyan-400' : 'text-slate-500 dark:text-slate-400'}`} />
-              <span className="truncate">Practice</span>
+              {currentTab === 'ailab' && (
+                <div className="absolute inset-x-2 inset-y-1 rounded-xl bg-cyan-500/10 dark:bg-cyan-500/15 -z-10" />
+              )}
+              <BookOpen className={`w-5 h-5 mb-0.5 ${currentTab === 'ailab' ? 'scale-110 text-cyan-600 dark:text-cyan-400' : 'text-slate-400 dark:text-slate-500'}`} />
+              <span className="truncate tracking-tight">Practice</span>
             </button>
             <button
               onClick={() => setCurrentTab('battle')}
-              className={`flex flex-col items-center justify-center w-12 h-12 rounded-xl text-[10px] font-semibold transition-all ${
-                currentTab === 'battle' ? 'text-cyan-700 dark:text-cyan-400 scale-105' : 'text-slate-500 dark:text-slate-400'
+              className={`relative flex flex-col items-center justify-center flex-1 h-14 rounded-2xl text-[10px] font-bold transition-all cursor-pointer ${
+                currentTab === 'battle' ? 'text-cyan-600 dark:text-cyan-400 font-extrabold' : 'text-slate-400 dark:text-slate-500'
               }`}
             >
-              <Swords className={`w-5 h-5 mb-0.5 ${currentTab === 'battle' ? 'text-cyan-700 dark:text-cyan-400' : 'text-slate-500 dark:text-slate-400'}`} />
-              <span className="truncate">1v1 Battle</span>
+              {currentTab === 'battle' && (
+                <div className="absolute inset-x-2 inset-y-1 rounded-xl bg-cyan-500/10 dark:bg-cyan-500/15 -z-10" />
+              )}
+              <Swords className={`w-5 h-5 mb-0.5 ${currentTab === 'battle' ? 'scale-110 text-cyan-600 dark:text-cyan-400' : 'text-slate-400 dark:text-slate-500'}`} />
+              <span className="truncate tracking-tight">1v1</span>
             </button>
             <button
               onClick={() => setCurrentTab('community')}
-              className={`flex flex-col items-center justify-center w-12 h-12 rounded-xl text-[10px] font-semibold transition-all ${
-                currentTab === 'community' ? 'text-cyan-700 dark:text-cyan-400 scale-105' : 'text-slate-500 dark:text-slate-400'
+              className={`relative flex flex-col items-center justify-center flex-1 h-14 rounded-2xl text-[10px] font-bold transition-all cursor-pointer ${
+                currentTab === 'community' ? 'text-cyan-600 dark:text-cyan-400 font-extrabold' : 'text-slate-400 dark:text-slate-500'
               }`}
             >
-              <MessageSquare className={`w-5 h-5 mb-0.5 ${currentTab === 'community' ? 'text-cyan-700 dark:text-cyan-400' : 'text-slate-500 dark:text-slate-400'}`} />
-              <span className="truncate">Community</span>
+              {currentTab === 'community' && (
+                <div className="absolute inset-x-2 inset-y-1 rounded-xl bg-cyan-500/10 dark:bg-cyan-500/15 -z-10" />
+              )}
+              <MessageSquare className={`w-5 h-5 mb-0.5 ${currentTab === 'community' ? 'scale-110 text-cyan-600 dark:text-cyan-400' : 'text-slate-400 dark:text-slate-500'}`} />
+              <span className="truncate tracking-tight">Community</span>
             </button>
             <button
               onClick={onOpenAuth}
-              className="flex flex-col items-center justify-center w-12 h-12 rounded-xl text-[10px] font-bold text-cyan-600 dark:text-cyan-400 transition-all hover:scale-105"
+              className="relative flex flex-col items-center justify-center flex-1 h-14 rounded-2xl text-[10px] font-bold text-cyan-600 dark:text-cyan-400 transition-all cursor-pointer hover:scale-105"
             >
               <User className="w-5 h-5 mb-0.5 text-cyan-600 dark:text-cyan-400" />
-              <span className="truncate">Sign In</span>
+              <span className="truncate tracking-tight">Sign In</span>
             </button>
           </>
         )}

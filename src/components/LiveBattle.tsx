@@ -187,6 +187,28 @@ export const LiveBattle: React.FC = () => {
     return () => clearInterval(timer);
   }, [battleState, currentIndex, battleQuestions]);
 
+  // Dynamic Real-time Opponent simulation pacer
+  useEffect(() => {
+    if (battleState !== 'active') return;
+
+    // Simulate realistic opponent action pacing for current question (answers within 3.5 to 7.5 seconds)
+    const delay = Math.floor(Math.random() * 3500) + 3200;
+    const oppTimer = setTimeout(() => {
+      setOpponentScore((prev) => {
+        // Realistic 75% accuracy
+        const isCorrect = Math.random() < 0.75;
+        if (isCorrect) {
+          const bonus = Math.floor(Math.random() * 60) + 40;
+          return prev + 100 + bonus;
+        }
+        return prev;
+      });
+      setOpponentCurrentQ((prev) => Math.min(currentIndex + 1, battleQuestions.length));
+    }, delay);
+
+    return () => clearTimeout(oppTimer);
+  }, [battleState, currentIndex, battleQuestions.length]);
+
   // Handle Solo Mode Start
   const startSoloBattle = async () => {
     setLoadingMatch(true);
@@ -246,10 +268,18 @@ export const LiveBattle: React.FC = () => {
 
       const querySnapshot = await getDocs(roomsQuery);
       let foundRoomId: string | null = null;
+      const now = Date.now();
 
       for (const docSnap of querySnapshot.docs) {
         const data = docSnap.data();
-        if (data.player1?.uid !== profile.uid) {
+        let createdTime = 0;
+        if (data.createdAt) {
+          createdTime = new Date(data.createdAt).getTime();
+        }
+        // Only accept waiting rooms created in the last 45 seconds (strictly active live human users)
+        const isFresh = createdTime > 0 ? (now - createdTime) < 45000 : false;
+
+        if (data.player1?.uid !== profile.uid && isFresh) {
           foundRoomId = docSnap.id;
           if (data.player1) {
             setOpponentUid(data.player1.uid || null);

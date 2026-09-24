@@ -25,7 +25,9 @@ import {
   getDocs,
   where,
   deleteDoc,
-  writeBatch
+  writeBatch,
+  arrayUnion,
+  arrayRemove
 } from 'firebase/firestore';
 import { auth, db, googleProvider, handleFirestoreError, OperationType } from '../lib/firebase';
 import { UserProfile, Subject, LiveStats, MASTER_ADMIN_EMAILS, UserRole, AppTab } from '../types';
@@ -66,6 +68,8 @@ interface ArenaContextType {
     imageUrl?: string,
     actionUrl?: string
   ) => Promise<void>;
+  followUser: (targetUid: string) => Promise<void>;
+  unfollowUser: (targetUid: string) => Promise<void>;
   signOutUser: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, pass: string) => Promise<void>;
@@ -682,6 +686,77 @@ export const ArenaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
+  const followUser = async (targetUid: string) => {
+    if (!user || !profile || user.uid === targetUid) return;
+    try {
+      const currentUserRef = doc(db, 'users', user.uid);
+      await updateDoc(currentUserRef, {
+        following: arrayUnion(targetUid),
+        followingCount: increment(1),
+      });
+
+      const targetUserRef = doc(db, 'users', targetUid);
+      await updateDoc(targetUserRef, {
+        followers: arrayUnion(user.uid),
+        followersCount: increment(1),
+      });
+
+      // Update local profile state immediately
+      setProfile((prev) => {
+        if (!prev) return prev;
+        const newFollowing = [...(prev.following || [])];
+        if (!newFollowing.includes(targetUid)) newFollowing.push(targetUid);
+        return {
+          ...prev,
+          following: newFollowing,
+          followingCount: (prev.followingCount || 0) + 1,
+        };
+      });
+
+      // Notification
+      await addDoc(collection(db, 'notifications'), {
+        userId: targetUid,
+        title: 'New Follower! 👤',
+        message: `${profile.displayName || 'An engineering peer'} started following your AKTU Arena progress.`,
+        type: 'follow',
+        actorUid: user.uid,
+        actorName: profile.displayName || 'Engineer',
+        createdAt: new Date().toISOString(),
+        read: false,
+      });
+    } catch (err) {
+      console.warn('Follow user error:', err);
+    }
+  };
+
+  const unfollowUser = async (targetUid: string) => {
+    if (!user || !profile || user.uid === targetUid) return;
+    try {
+      const currentUserRef = doc(db, 'users', user.uid);
+      await updateDoc(currentUserRef, {
+        following: arrayRemove(targetUid),
+        followingCount: increment(-1),
+      });
+
+      const targetUserRef = doc(db, 'users', targetUid);
+      await updateDoc(targetUserRef, {
+        followers: arrayRemove(user.uid),
+        followersCount: increment(-1),
+      });
+
+      setProfile((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          following: (prev.following || []).filter((id) => id !== targetUid),
+          followingCount: Math.max(0, (prev.followingCount || 0) - 1),
+        };
+      });
+    } catch (err) {
+      console.warn('Unfollow user error:', err);
+    }
+  };
+
   const signOutUser = async () => {
     try {
       await fbSignOut(auth);
@@ -768,6 +843,8 @@ export const ArenaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         purgeBattle,
         purgeBattlesBatch,
         broadcastAnnouncement,
+        followUser,
+        unfollowUser,
         signOutUser,
         signInWithGoogle,
         signInWithEmail,

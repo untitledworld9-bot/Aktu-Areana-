@@ -15,6 +15,7 @@ import { db } from '../lib/firebase';
 import { GlassCard } from './ui/GlassCard';
 import { useArena } from '../context/ArenaContext';
 import { AKTU_BRANCHES } from '../data/branches';
+import { UserProfileModal } from './UserProfileModal';
 
 interface LeaderboardUser {
   uid: string;
@@ -37,6 +38,13 @@ export const LeaderboardView: React.FC = () => {
   const [liveUsers, setLiveUsers] = useState<LeaderboardUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [challengedIds, setChallengedIds] = useState<{ [id: string]: boolean }>({});
+  const [selectedProfileUid, setSelectedProfileUid] = useState<string | null>(null);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+  const openUserProfile = (uid: string) => {
+    setSelectedProfileUid(uid);
+    setIsProfileModalOpen(true);
+  };
 
   const handleChallengeUser = async (targetUser: LeaderboardUser) => {
     if (!profile?.uid) return;
@@ -247,8 +255,12 @@ export const LeaderboardView: React.FC = () => {
 
                       {/* Student Info */}
                       <td className="py-3.5 px-4">
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-full overflow-hidden bg-slate-900 border border-slate-700 flex-shrink-0 flex items-center justify-center">
+                        <div 
+                          onClick={() => user.uid && openUserProfile(user.uid)}
+                          className="flex items-center gap-2.5 cursor-pointer group w-fit"
+                          title={`View @${user.displayName}'s Profile`}
+                        >
+                          <div className="w-8 h-8 rounded-full overflow-hidden bg-slate-900 border border-slate-700 group-hover:border-cyan-400 group-hover:ring-2 group-hover:ring-cyan-500/40 flex-shrink-0 flex items-center justify-center transition-all">
                             {user.photoURL ? (
                               <img src={user.photoURL} alt={user.displayName} className="w-full h-full object-cover" />
                             ) : (
@@ -257,7 +269,7 @@ export const LeaderboardView: React.FC = () => {
                               </span>
                             )}
                           </div>
-                          <div className="font-bold text-slate-100 flex items-center gap-2">
+                          <div className="font-bold text-slate-100 group-hover:text-cyan-300 flex items-center gap-2 transition-colors">
                             <span>{user.displayName}</span>
                             {isCurrentUser && (
                               <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
@@ -334,6 +346,16 @@ export const LeaderboardView: React.FC = () => {
           </div>
         )}
       </GlassCard>
+
+      {/* Instagram-style Student Profile Modal */}
+      <UserProfileModal
+        isOpen={isProfileModalOpen}
+        targetUid={selectedProfileUid}
+        onClose={() => {
+          setIsProfileModalOpen(false);
+          setSelectedProfileUid(null);
+        }}
+      />
     </div>
   );
 };

@@ -202,8 +202,25 @@ export const ProfileView: React.FC = () => {
               </div>
             </div>
 
+            {/* Instagram Style Social & Network Bar */}
+            <div className="flex items-center justify-center sm:justify-start gap-4 mt-3 pt-3 border-t border-slate-850">
+              <div className="flex items-center gap-1.5 text-xs">
+                <span className="font-extrabold text-cyan-400 font-['Outfit'] text-sm">
+                  {profile?.followersCount ?? (profile?.followers?.length ?? 0)}
+                </span>
+                <span className="text-slate-400 font-semibold">Followers</span>
+              </div>
+              <div className="w-1 h-1 rounded-full bg-slate-700" />
+              <div className="flex items-center gap-1.5 text-xs">
+                <span className="font-extrabold text-slate-100 font-['Outfit'] text-sm">
+                  {profile?.followingCount ?? (profile?.following?.length ?? 0)}
+                </span>
+                <span className="text-slate-400 font-semibold">Following</span>
+              </div>
+            </div>
+
             {/* Quick Badges */}
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-4">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-3">
               {isMasterAdmin ? (
                 <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold shadow-sm">
                   <Crown className="w-3.5 h-3.5 text-amber-400" />
