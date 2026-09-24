@@ -71,7 +71,17 @@ export const TermsPage: React.FC = () => {
             <span>4. Intellectual Property & Curriculum Content</span>
           </h3>
           <p className="text-slate-400 leading-relaxed">
-            The AKTU curriculum structure is aligned with official syllabus guidelines published by Dr. A.P.J. Abdul Kalam Technical University. Generated questions, algorithmic explanations, and telemetry graphics are the property of AKTU Arena.
+            The AKTU curriculum structure is aligned with public syllabus guidelines. Generated practice problems, algorithms, battle mechanics, and telemetry graphics are the proprietary intellectual property of AKTU Arena.
+          </p>
+        </GlassCard>
+
+        <GlassCard className="p-6">
+          <h3 className="text-base font-bold text-slate-100 font-['Outfit'] mb-2 flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <span>5. Independent Platform Disclaimer</span>
+          </h3>
+          <p className="text-slate-400 leading-relaxed">
+            AKTU Arena is an independent educational platform for engineering students. It is not affiliated with, endorsed by, or operated by Dr. A.P.J. Abdul Kalam Technical University (AKTU) administration or any government entity. All university trademarks belong to their respective owners.
           </p>
         </GlassCard>
       </div>

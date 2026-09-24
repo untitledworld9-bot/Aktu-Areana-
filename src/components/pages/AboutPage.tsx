@@ -114,6 +114,13 @@ export const AboutPage: React.FC = () => {
         </div>
       </GlassCard>
 
+      {/* Independent Platform Disclaimer */}
+      <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-800 text-center mb-6">
+        <p className="text-[11px] text-slate-500 leading-relaxed max-w-3xl mx-auto">
+          <strong className="text-slate-400">Disclaimer:</strong> AKTU Arena is an independent educational technology and competitive learning platform created for engineering undergraduates. It is not affiliated with, endorsed by, or operated by Dr. A.P.J. Abdul Kalam Technical University (AKTU) administration or any government entity.
+        </p>
+      </div>
+
       {/* Direct Contact Notice */}
       <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 text-center">
         <h4 className="text-base font-bold text-slate-100 mb-2">Want to partner with your college club or department?</h4>

@@ -131,10 +131,10 @@ export const ProfileOnboarding: React.FC = () => {
             <div className="p-4 rounded-xl border-2 border-cyan-500/50 bg-cyan-950/20 flex items-center justify-between">
               <div>
                 <div className="font-bold text-slate-100 text-sm">
-                  Dr. A.P.J. Abdul Kalam Technical University (AKTU)
+                  AKTU / UPTU Engineering Curriculum
                 </div>
                 <div className="text-xs text-slate-400 mt-0.5">
-                  Formerly UPTU • Lucknow, Uttar Pradesh
+                  B.Tech 1st Year Syllabus & Exam Preparation Track
                 </div>
               </div>
               <div className="w-6 h-6 rounded-full bg-cyan-500 flex items-center justify-center text-slate-950">

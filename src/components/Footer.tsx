@@ -290,15 +290,15 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAuth }) => {
         </div>
       </div>
 
-      {/* Bottom Bar: Copyright, University Attribution & Quick Links */}
+      {/* Bottom Bar: Copyright, Legal Disclaimer & Quick Links */}
       <div className="border-t border-slate-900 bg-[#020306] py-6 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 text-center md:text-left">
-          <div className="space-y-1">
+          <div className="space-y-1.5 max-w-xl">
             <div>
               <span className="font-semibold text-slate-300">© 2026–2027 AKTU Arena.</span> All rights reserved.
             </div>
-            <p className="text-[11px] text-slate-600">
-              Dr. A.P.J. Abdul Kalam Technical University (AKTU), Sector-11, Jankipuram Vistar, Lucknow, Uttar Pradesh.
+            <p className="text-[11px] text-slate-500 leading-relaxed">
+              <strong className="text-slate-400">Disclaimer:</strong> AKTU Arena is an independent student learning and exam preparation platform. It is not affiliated with, endorsed by, or operated by Dr. A.P.J. Abdul Kalam Technical University (AKTU).
             </p>
           </div>
 
